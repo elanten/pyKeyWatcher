@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load extras %}
+{% load bootstrap_tags %}
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-12">
+                <input type="hidden" name="keyId" value="2">
+                <div class="panel panel-warning">
+                    <div class="panel-heading">
+                        Инормация по ключу:
+                        {% if digitalkey_form.get_id %}
+                            <a id="btn-remove" href="{% url 'digital_key:remove_by_id' digitalkey_form.get_id %}">
+                                <span class="glyphicon glyphicon-trash pull-right"></span>
+                            </a>
+                        {% endif %}
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    {{ digitalkey_form.name|label_with_classes:'control-label' }}
+                                    {{ digitalkey_form.name|field_with_classes:'form-control' }}
+                                </div>
+                                <div class="form-group">
+                                    {{ digitalkey_form.serial|label_with_classes:'control-label' }}
+                                    {{ digitalkey_form.serial|field_with_classes:'form-control' }}
+                                </div>
+                                <div class="form-group">
+                                    {{ digitalkey_form.expire|label_with_classes:'control-label' }}
+                                    {{ digitalkey_form.expire|field_with_classes:'form-control' }}
+                                </div>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="form-group">
+                                    {{ digitalkey_form.key_type|label_with_classes:'control-label' }}
+                                    {{ digitalkey_form.key_type|field_with_classes:'form-control' }}
+                                </div>
+                                <div class="form-group">
+                                    {{ digitalkey_form.description|label_with_classes:'control-label' }}
+                                    {{ digitalkey_form.description|field_with_classes:'form-control' }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Держатели ключа</div>
+                    <div class="panel-body">
+                        <select name="holders" id="holders" multiple="multiple" style="display: none">
+                            {% for contact in holders %}
+                                <option value="{{ contact.id }}" selected="selected">{{ contact.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Контакты</div>
+                    <div class="panel-body">
+                        <select name="contacts" id="contacts" multiple="multiple" style="display: none">
+                            {% for contact in contacts %}
+                                <option value="{{ contact.id }}" selected="selected">{{ contact.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <input class="btn btn-default" type="submit" value="Save">
+                <a href="{% if digitalkey_form.get_id %}{% url 'digital_key:show_by_id' digitalkey_form.get_id %}
+                {% else %}{% url 'digital_key:all' %}{% endif %}" class="btn btn-default">Cancel</a>
+            </div>
+        </div>
+    </form>
+    <script>
+        $(function () {
+            $("#holders, #contacts")
+                .selectize({
+                    valueField: 'id',
+                    labelField: 'name',
+                    searchField: 'name',
+                    options: [],
+                    create: false,
+                    persist: false,
+                    hideSelected: true,
+                    render: {
+                        option: function (item, escape) {
+                            return '<div>' + escape(item.name) + '</div>';
+                        }
+                    },
+                    load: function (query, callback) {
+                        if (query.length < 3) return callback();
+                        $.ajax({
+                            url: '{% url 'contragent:json_by_name' %}',
+                            type: 'GET',
+                            data: {
+                                search: query
+                            },
+                            dataType: 'json',
+                            error: function () {
+                                callback();
+                            },
+                            success: function (res) {
+                                console.log(res);
+                                callback(res);
+                            }
+                        });
+                    }
+                });
+
+            $('#btn-remove').click(function (e) {
+                if (!confirm('Вы уверены что хотите удалить запись?')) {
+                    e.preventDefault();
+                }
+            });
+            var $expire = $('#id_expire');
+
+            $expire.attr('placeholder', moment().format('YYYY-MM-DD'));
+            $expire.datetimepicker({
+                locale: 'ru',
+                format: 'YYYY-MM-DD'
+            });
+        });
+
+    </script>
+{% endblock content %}

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div id="toolbar">
+        <div class="form-inline" role="form">
+            <a href="{% url 'digital_key:add' %}" class="btn btn-default">
+                <span class="glyphicon glyphicon-plus"></span>
+            </a>
+        </div>
+    </div>
+    <table data-toggle="table"
+           data-height="700"
+           data-toolbar="#toolbar"
+           data-search="true"
+           data-sort-name="expire"
+           data-sort-order="asc">
+        <thead>
+        <tr style="display: none">
+            <th data-sortable="true">Название</th>
+            <th data-sortable="true">Номер</th>
+            <th data-field="expire" data-sortable="true">Истекает</th>
+            <th>Тип</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for view in key_views %}
+            <tr class="{{ view.style }}" style="display: none">
+                <td><a href="{% url 'digital_key:show_by_id' view.key.id %}">{{ view.key.name }}</a></td>
+                <td>{{ view.key.serial }}</td>
+                <td>{{ view.key.expire|date:'Y-m-d' }}</td>
+                <td>{{ view.key.key_type }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

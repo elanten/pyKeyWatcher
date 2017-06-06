@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="id" value="1">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Контрагент:
+                        {% if contragent_form.get_id %}
+                        <a id="btn-remove" href="{% url 'contragent:remove' contragent_form.get_id %}">
+                            <span class="glyphicon glyphicon-trash pull-right"></span>
+                        </a>
+                        {% endif %}
+                    </div>
+                    <div class="panel-body">
+                        <div class="rov">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label"
+                                           for="{{ contragent_form.name.id_for_label }}">Имя:</label>
+                                    {{ contragent_form.name }}
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label class="control-label"
+                                           for="{{ contragent_form.description.id_for_label }}">Описание:</label>
+                                    {{ contragent_form.description }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Контактные данные:
+                        <a id="contact-add" href="#">
+                            <span class="glyphicon glyphicon-plus pull-right"></span>
+                        </a>
+                    </div>
+                    <div class="panel-body" style="min-height:250px;">
+                        {{ info_formset.management_form }}
+                        <table id="contact-table" class="contact-table">
+                            <tbody>
+                            <tr id="tr_proto" style="display: none">
+                                <td>{{ info_formset.empty_form.contact_type }}</td>
+                                <td>{{ info_formset.empty_form.value }}</td>
+                                <td>
+                                    {% if info_formset.can_delete %}
+                                        <input style="display: none" type="checkbox"
+                                               id="id-{{ info_formset.empty_form.prefix }}-DELETE"
+                                               name="{{ info_formset.empty_form.prefix }}-DELETE" value="True">
+                                    {% endif %}
+                                    <label for="id-{{ info_formset.empty_form.prefix }}-DELETE">
+                                        <span class="btn glyphicon glyphicon-remove"></span>
+                                    </label>
+                                </td>
+                            </tr>
+                            {% for info_form in info_formset.forms %}
+                                <tr class="{{ info_form.has_error_class }}">
+                                    <td>{{ info_form.contact_type }}</td>
+                                    <td>{{ info_form.value }}</td>
+                                    <td>
+                                        {{ info_form.id }}
+                                        {% if info_formset.can_delete %}
+                                            <input type="checkbox" name="{{ info_form.prefix }}-DELETE"
+                                                   id="id-{{ info_form.prefix }}-DELETE" style="display: none" value="True"
+                                                   {% if info_form.cleaned_data.DELETE %}checked=""{% endif %}>
+                                            <label for="id-{{ info_form.prefix }}-DELETE">
+                                                <span class="btn glyphicon glyphicon-remove"></span>
+                                            </label>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <input type="submit" value="Save" class="btn btn-default">
+                <a href="{% if contragent_form.id.value %}{% url 'contragent:show_by_id' contragent_form.id.value %}
+                {% else %}{% url 'contragent:all' %}{% endif %}"
+                   class="btn btn-default">Cancel</a>
+            </div>
+        </div>
+    </form>
+    <script>
+        $(function () {
+            var $tRow = $('#tr_proto').detach().removeAttr('id').removeAttr('style');
+            var $table = $('#contact-table');
+            var $total = $('#id_form-TOTAL_FORMS');
+
+            var onRemove = function (event) {
+                $(this).closest('tr').toggleClass('removed')
+            };
+            $table.find('input:checked').closest('tr').addClass('removed');
+            $table.find('.glyphicon-remove').click(onRemove);
+
+            var addDetail = function (event) {
+                event.preventDefault();
+                var $new = $tRow.clone();
+                var num = $total.val();
+                $total.val(+$total.val() + 1);
+                $new.find('.glyphicon-remove').click(onRemove);
+                $new.find("input[name*='__prefix__'], select[name*='__prefix__'], label[for*='__prefix__']")
+                    .each(function () {
+                        var id = $(this).attr('id');
+                        var name = $(this).attr('name');
+                        var _for = $(this).attr('for');
+                        if (id) $(this).attr('id', id.replace('__prefix__', num));
+                        if (name) $(this).attr('name', name.replace('__prefix__', num));
+                        if (_for) $(this).attr('for', _for.replace('__prefix__', num));
+                    });
+                $table.find('tbody').append($new);
+            };
+
+            $('#contact-add').click(addDetail);
+
+            $('#btn-remove').click(function (e) {
+                if (!confirm('Вы уверены что хотите удалить запись?')) {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+{% endblock content %}

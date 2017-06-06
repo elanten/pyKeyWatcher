@@ -1,0 +1,15 @@
+from django.conf.urls import url
+
+from . import views
+
+app_name = 'contragent'
+urlpatterns = [
+    url(r'^$', views.show_all, name='all'),
+    url(r'^show/(?P<ctype>holders|contacts)$', views.show_all_by_type, name='all_by_type'),
+    url(r'^show/(?P<cid>[0-9]+)$', views.show_by_id, name='show_by_id'),
+    url(r'^json/search$', views.show_all_by_name, name='json_by_name'),
+    url(r'^edit/(?P<cid>[0-9]+)$', views.edit_by_id, name='edit_by_id'),
+    url(r'^add$', views.create, name='add'),
+    url(r'^remove/(?P<cid>[0-9]+)$', views.remove_by_id, name='remove'),
+
+]

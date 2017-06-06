@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div id="toolbar">
+        <div class="form-inline" role="form">
+            <a href="{% url 'contragent:add' %}" class="btn btn-default">
+                <span class="glyphicon glyphicon-plus"></span>
+            </a>
+        </div>
+    </div>
+    <table data-toggle="table"
+           data-height="700"
+           data-toolbar="#toolbar"
+           data-search="true">
+        <thead>
+        <tr style="display:none;">
+            <th data-sortable="true">Контрагент</th>
+            <th>Описание</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for contragent in contragents %}
+            <tr style="display:none;">
+                <td><a href="{% url 'contragent:show_by_id' contragent.id %}">{{ contragent.name }}</a></td>
+                <td>{{ contragent.description }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Инормация по ключу:
+                    <a href="{% url 'digital_key:edit_by_id' view.key.id%}">
+                        <span class="glyphicon glyphicon-pencil pull-right"></span>
+                    </a>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <p><strong>Наименование:</strong>{{ view.key.name }}</p>
+                            <p><strong>Номер:</strong> {{ view.key.serial }}</p>
+                            <p><strong>Истекает:</strong>
+                                <span class="text-default">{{ view.key.expire|date:'Y-m-d' }}</span>
+                                <span>({{ view.days_left }} days)</span>
+                            </p>
+                        </div>
+                        <div class="col-md-7">
+                            <p><strong>Тип:</strong> {{ view.key.key_type }}</p>
+                            <p><strong>Описание:</strong></p>
+                            <pre>{{ view.key.description }}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">Держатели ключа</div>
+                <div class="panel-body">
+                    {% for contragent in view.key.get_holders %}
+                    <p><a href="{% url 'contragent:show_by_id' contragent.id %}">{{ contragent.name }}</a></p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">Контакты</div>
+                <div class="panel-body">
+                    {% for contragent in view.key.get_contacts %}
+                    <p><a href="{% url 'contragent:show_by_id' contragent.id %}">{{ contragent.name }}</a></p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
