@@ -19,6 +19,7 @@
             <th data-sortable="true">Номер</th>
             <th data-field="expire" data-sortable="true">Истекает</th>
             <th>Тип</th>
+            <th>Назначение</th>
         </tr>
         </thead>
         <tbody>
@@ -28,6 +29,7 @@
                 <td>{{ view.key.serial }}</td>
                 <td>{{ view.key.expire|date:'Y-m-d' }}</td>
                 <td>{{ view.key.key_type }}</td>
+                <td>{{ view.key.key_allocation }}</td>
             </tr>
         {% endfor %}
         </tbody>

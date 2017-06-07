@@ -14,6 +14,7 @@
                         <div class="col-md-5">
                             <p><strong>Наименование:</strong>{{ view.key.name }}</p>
                             <p><strong>Номер:</strong> {{ view.key.serial }}</p>
+                            <p><strong>Назначение:</strong> {{ view.key.key_allocation }}</p>
                             <p><strong>Истекает:</strong>
                                 <span class="text-default">{{ view.key.expire|date:'Y-m-d' }}</span>
                                 <span>({{ view.days_left }} days)</span>

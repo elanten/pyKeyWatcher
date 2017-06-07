@@ -1,4 +1,4 @@
-from digitalkey.models import DigitalKey, KeyType, DigitalKeyContact
+from digitalkey.models import DigitalKey, KeyType, DigitalKeyContact, KeyAllocation
 from contragent.models import Contragent, ContactType, ContactInfo
 from django.utils import dateparse
 
@@ -6,6 +6,7 @@ DigitalKeyContact.objects.all().delete()
 
 DigitalKey.objects.all().delete()
 KeyType.objects.all().delete()
+KeyAllocation.objects.all().delete()
 
 ContactInfo.objects.all().delete()
 Contragent.objects.all().delete()
@@ -16,6 +17,9 @@ ruToken = KeyType.objects.create(name='ruToken')
 
 email = ContactType.objects.create(name='почта')
 phone = ContactType.objects.create(name='телефон')
+
+loc1 = KeyAllocation(name='Госзакупки').save()
+loc2 = KeyAllocation(name='Росаккредитация').save()
 
 con1 = Contragent.objects.create(name='Фамилия Имя Отчество', description='Описание')
 con2 = Contragent.objects.create(name='ООО Организация', description='Описание организации')
@@ -43,11 +47,11 @@ for con in Contragent.objects.all():
 
 key1 = DigitalKey.objects.create(
     name='Ключ 1', serial='SN-1111', expire=dateparse.parse_date('2017-05-30'),
-    key_type=eToken, description='111'
+    key_type=eToken, description='111', key_allocation=loc1
 )
 key2 = DigitalKey.objects.create(
     name='Ключ 2', serial='SN-2222', expire=dateparse.parse_date('2017-06-30'),
-    key_type=eToken, description='222'
+    key_type=eToken, description='222', key_allocation=loc2
 )
 key3 = DigitalKey.objects.create(
     name='Ключ 3', serial='SN-3333', expire=dateparse.parse_date('2017-07-30'),
@@ -62,8 +66,8 @@ key5 = DigitalKey.objects.create(
     key_type=eToken, description='555'
 )
 
-DigitalKeyContact.objects.create(type='h', digital_key=key1, contragent=con1).save()
-DigitalKeyContact.objects.create(type='c', digital_key=key1, contragent=con2).save()
-DigitalKeyContact.objects.create(type='h', digital_key=key2, contragent=con1).save()
-DigitalKeyContact.objects.create(type='c', digital_key=key2, contragent=con1).save()
-DigitalKeyContact.objects.create(type='c', digital_key=key2, contragent=con2).save()
+DigitalKeyContact(type='h', digital_key=key1, contragent=con1).save()
+DigitalKeyContact(type='c', digital_key=key1, contragent=con2).save()
+DigitalKeyContact(type='h', digital_key=key2, contragent=con1).save()
+DigitalKeyContact(type='c', digital_key=key2, contragent=con1).save()
+DigitalKeyContact(type='c', digital_key=key2, contragent=con2).save()

@@ -18,6 +18,14 @@ class KeyType(models.Model):
         return self.name
 
 
+class KeyAllocation(models.Model):
+    name = models.CharField(max_length=200)
+    description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+
 class DigitalKey(models.Model):
     name = models.CharField(max_length=200)
     serial = models.CharField(max_length=200)
@@ -25,6 +33,7 @@ class DigitalKey(models.Model):
     expire = models.DateField()
     removed = models.BooleanField(default=False)
     key_type = models.ForeignKey(KeyType, null=True)
+    key_allocation = models.ForeignKey(KeyAllocation, null=True)
     contacts = models.ManyToManyField(
         Contragent,
         through='DigitalKeyContact',

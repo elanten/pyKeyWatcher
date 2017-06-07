@@ -16,5 +16,5 @@ class DigitalKeyForm(forms.ModelForm):
 
     class Meta:
         model = DigitalKey
-        fields = ['name', 'serial', 'description', 'expire', 'key_type']
+        fields = ['name', 'serial', 'description', 'expire', 'key_type', 'key_allocation']
 
