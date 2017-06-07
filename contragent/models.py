@@ -1,5 +1,4 @@
 from django.db import models
-from typing import List
 
 # Create your models here.
 
@@ -7,7 +6,6 @@ from typing import List
 class Contragent(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(null=True)
-    removed = models.BooleanField(default=False)
 
     def get_contact_info(self):
         return self.contactinfo_set.all()

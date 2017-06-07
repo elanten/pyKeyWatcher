@@ -1,8 +1,8 @@
-from digitalkey.models import DigitalKey, KeyType, DigitalKeyContacts
+from digitalkey.models import DigitalKey, KeyType, DigitalKeyContact
 from contragent.models import Contragent, ContactType, ContactInfo
 from django.utils import dateparse
 
-DigitalKeyContacts.objects.all().delete()
+DigitalKeyContact.objects.all().delete()
 
 DigitalKey.objects.all().delete()
 KeyType.objects.all().delete()
@@ -17,14 +17,29 @@ ruToken = KeyType.objects.create(name='ruToken')
 email = ContactType.objects.create(name='почта')
 phone = ContactType.objects.create(name='телефон')
 
-con1 = Contragent.objects.create(name='ФИО 1', description='123')
-con2 = Contragent.objects.create(name='ООО 1', description='456')
+con1 = Contragent.objects.create(name='Фамилия Имя Отчество', description='Описание')
+con2 = Contragent.objects.create(name='ООО Организация', description='Описание организации')
 
-con1.contactinfo_set.create(contact_type=email, value='test@test.io')
-con1.contactinfo_set.create(contact_type=phone, value='123 45 67')
+con3 = Contragent.objects.create(name='Дьячкова Алла Куприяновна', description='Описание Дьячкова Алла Куприяновна')
+con4 = Contragent.objects.create(name='Матвеева Клавдия Иринеевна', description='Описание Матвеева Клавдия Иринеевна')
+con5 = Contragent.objects.create(name='Кулакова Жанна Богдановна', description='Описание Кулакова Жанна Богдановна')
+con6 = Contragent.objects.create(name='Медведьев Герман Валерьянович',
+                                 description='Описание Медведьев Герман Валерьянович')
+con7 = Contragent.objects.create(name='Блохина Кира Лукьяновна', description='Описание Блохина Кира Лукьяновна')
+con8 = Contragent.objects.create(name='Белоусова Евфросиния Агафоновна',
+                                 description='Описание Белоусова Евфросиния Агафоновна')
+con9 = Contragent.objects.create(name='Сергеев Кондрат Владленович', description='Описание Сергеев Кондрат Владленович')
+con10 = Contragent.objects.create(name='Колесников Мэлор Сергеевич', description='Описание Колесников Мэлор Сергеевич')
+con11 = Contragent.objects.create(name='Ларионова Иванна Улебовна', description='Описание Ларионова Иванна Улебовна')
+con12 = Contragent.objects.create(name='Яковлев Альвиан Матвеевич', description='Описание Яковлев Альвиан Матвеевич')
+con13 = Contragent.objects.create(name='ООО БГБ 123', description='Описание БайнетГамаБук')
+con14 = Contragent.objects.create(name='ООО БКИ', description='Описание БитКлавИнфо')
+con15 = Contragent.objects.create(name='ООО Qwe 123', description='Описание Quick Wild Eyes')
 
-con2.contactinfo_set.create(contact_type=email, value='test@test.io')
-con2.contactinfo_set.create(contact_type=phone, value='123 45 67')
+
+for con in Contragent.objects.all():
+    con.contactinfo_set.create(contact_type=email, value="test@test.io")
+    con.contactinfo_set.create(contact_type=email, value="123 45 67")
 
 key1 = DigitalKey.objects.create(
     name='Ключ 1', serial='SN-1111', expire=dateparse.parse_date('2017-05-30'),
@@ -47,8 +62,8 @@ key5 = DigitalKey.objects.create(
     key_type=eToken, description='555'
 )
 
-DigitalKeyContacts.objects.create(type='h', digital_key=key1, contragent=con1).save()
-DigitalKeyContacts.objects.create(type='c', digital_key=key1, contragent=con2).save()
-DigitalKeyContacts.objects.create(type='h', digital_key=key2, contragent=con1).save()
-DigitalKeyContacts.objects.create(type='c', digital_key=key2, contragent=con1).save()
-DigitalKeyContacts.objects.create(type='c', digital_key=key2, contragent=con2).save()
+DigitalKeyContact.objects.create(type='h', digital_key=key1, contragent=con1).save()
+DigitalKeyContact.objects.create(type='c', digital_key=key1, contragent=con2).save()
+DigitalKeyContact.objects.create(type='h', digital_key=key2, contragent=con1).save()
+DigitalKeyContact.objects.create(type='c', digital_key=key2, contragent=con1).save()
+DigitalKeyContact.objects.create(type='c', digital_key=key2, contragent=con2).save()

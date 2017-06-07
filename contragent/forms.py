@@ -2,7 +2,7 @@ from django import forms
 
 from contragent.models import ContactType, Contragent, ContactInfo
 
-detail_type_list = list((detail.id, detail.name) for detail in ContactType.objects.all())
+# detail_type_list = list((detail.id, detail.name) for detail in ContactType.objects.all())
 
 
 class ContragentForm(forms.ModelForm):
@@ -27,9 +27,6 @@ class ContragentDetailForm(forms.ModelForm):
         super(ContragentDetailForm, self).__init__(*args, **kwargs)
         self.fields['contact_type'].empty_label = None
         # self.auto_id = False
-
-    def clean(self):
-        cleaned_data = super(ContragentDetailForm, self).clean()
 
     def has_error_class(self):
         if any(self.errors):

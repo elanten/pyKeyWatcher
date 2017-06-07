@@ -1,8 +1,6 @@
 from django.http import Http404, JsonResponse
 from django.shortcuts import render, get_object_or_404, get_list_or_404, redirect
 from django.forms import formset_factory, modelformset_factory
-from django.forms.models import model_to_dict
-
 from contragent.forms import ContragentForm, ContragentDetailForm, ContragentSearchForm
 from digitalkey.support import ContactKeyWrapper
 from .models import Contragent, ContactInfo
@@ -26,7 +24,7 @@ def show_by_id(request, cid: int):
 
 
 def show_all_by_type(request, ctype):
-    contragents = Contragent.objects.filter(digitalkeycontacts__type=ctype[:1]).distinct()
+    contragents = Contragent.objects.filter(digitalkeycontact__type=ctype[:1]).distinct()
     if not contragents:
         raise Http404('Контакты')
     return render(request, 'contragent/list.html', {
@@ -68,12 +66,14 @@ def create(request):
     if request.method == 'POST':
         contragent_form = ContragentForm(request.POST)
         info_formset = ContactInfoFormSet(request.POST)
-        contragent = contragent_form.save()
-        for form in info_formset.forms:
-            contact_info = form.save(commit=False)
-            contact_info.contact = contragent
-            contact_info.save()
-        return redirect('contact:edit', contragent.id)
+        if contragent_form.is_valid():
+            contragent = contragent_form.save()
+            if info_formset.is_valid():
+                for form in info_formset.forms:
+                    contact_info = form.save(commit=False)
+                    contact_info.contact = contragent
+                    contact_info.save()
+            return redirect('contragent:show_by_id', contragent.id)
     else:
         contragent_form = ContragentForm()
         info_formset = ContactInfoFormSet()

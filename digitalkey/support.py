@@ -20,5 +20,5 @@ class DigitalKeyWrapper:
 class ContactKeyWrapper(DigitalKeyWrapper):
     def __init__(self, contragent, digitalkey):
         super().__init__(digitalkey, default_style='success')
-        self.is_holded = digitalkey.digitalkeycontacts_set.filter(contragent=contragent, type='h').count() > 0
-        self.is_contacted = digitalkey.digitalkeycontacts_set.filter(contragent=contragent, type='c').count() > 0
+        self.is_holded = digitalkey.digitalkeycontact_set.filter(contragent=contragent, type='h').count() > 0
+        self.is_contacted = digitalkey.digitalkeycontact_set.filter(contragent=contragent, type='c').count() > 0

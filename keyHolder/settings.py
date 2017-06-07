@@ -38,8 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'digitalkey.apps.DigitalkeyConfig',
-    'contragent.apps.ContragentConfig',
-    'libs.django_forms_bootstrap'
+    'contragent.apps.ContragentConfig'
 ]
 
 MIDDLEWARE = [
