@@ -10,7 +10,7 @@ from .models import Contragent, ContactInfo
 
 def show_all(request):
     return render(request, 'contragent/list.html', {
-        'contragents': get_list_or_404(Contragent)
+        'contragents': Contragent.objects.all()
     })
 
 

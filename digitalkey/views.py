@@ -8,7 +8,7 @@ from .models import DigitalKey
 
 
 def show_all(request):
-    keys = get_list_or_404(DigitalKey)
+    keys = DigitalKey.objects.all()
     key_views = list(DigitalKeyWrapper(key) for key in keys)
     return render(request, 'digitalkey/list.html', {
         'key_views': key_views
