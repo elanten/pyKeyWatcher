@@ -3,19 +3,19 @@ from django.shortcuts import render, get_object_or_404, get_list_or_404, redirec
 from django.forms import formset_factory, modelformset_factory
 from contragent.forms import ContragentForm, ContragentDetailForm, ContragentSearchForm
 from digitalkey.support import ContactKeyWrapper
-from .models import Contragent, ContactInfo
+from .models import Employee, ContactInfo
 
 
 # Create your views here.
 
 def show_all(request):
     return render(request, 'contragent/list.html', {
-        'contragents': get_list_or_404(Contragent)
+        'contragents': get_list_or_404(Employee)
     })
 
 
 def show_by_id(request, cid: int):
-    contragent = get_object_or_404(Contragent, pk=cid)
+    contragent = get_object_or_404(Employee, pk=cid)
     linked_keys_gen = (ContactKeyWrapper(contragent, key) for key in contragent.digitalkey_set.distinct())
     return render(request, 'contragent/detail.html', {
         'contragent': contragent,
@@ -24,7 +24,7 @@ def show_by_id(request, cid: int):
 
 
 def show_all_by_type(request, ctype):
-    contragents = Contragent.objects.filter(digitalkeycontact__type=ctype[:1]).distinct()
+    contragents = Employee.objects.filter(digitalkeycontact__type=ctype[:1]).distinct()
     if not contragents:
         raise Http404('Контакты')
     return render(request, 'contragent/list.html', {
@@ -33,7 +33,7 @@ def show_all_by_type(request, ctype):
 
 
 def edit_by_id(request, cid: int):
-    contragent = get_object_or_404(Contragent, pk=cid)
+    contragent = get_object_or_404(Employee, pk=cid)
     info_set = contragent.contactinfo_set.all()
     ContactInfoFormSet = modelformset_factory(
         ContactInfo, form=ContragentDetailForm,
@@ -84,7 +84,7 @@ def create(request):
 
 
 def remove_by_id(request, cid):
-    contragent = get_object_or_404(Contragent, pk=cid)
+    contragent = get_object_or_404(Employee, pk=cid)
     contragent.delete()
     return redirect('contragent:all')
 
@@ -94,7 +94,7 @@ def show_all_by_name(request):
         form = ContragentSearchForm(request.GET)
         if form.is_valid():
             name = form.cleaned_data['search']
-            agents = Contragent.objects.filter(name__icontains=name).values('id', 'name')
+            agents = Employee.objects.filter(name__icontains=name).values('id', 'name')
             response = JsonResponse(list(agents), safe=False)
             return response
     else:

@@ -1,7 +1,7 @@
 from django.db import models
 import datetime
 from django.utils import timezone
-from contragent.models import Contragent
+from contragent.models import Employee
 
 import logging
 
@@ -18,7 +18,7 @@ class KeyType(models.Model):
         return self.name
 
 
-class KeyAllocation(models.Model):
+class KeyAssignment(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
 
@@ -29,16 +29,20 @@ class KeyAllocation(models.Model):
 class DigitalKey(models.Model):
     name = models.CharField(max_length=200)
     serial = models.CharField(max_length=200)
-    description = models.TextField(blank=True)
-    expire = models.DateField()
-    removed = models.BooleanField(default=False)
-    key_type = models.ForeignKey(KeyType, null=True)
-    key_allocation = models.ForeignKey(KeyAllocation, null=True)
-    contacts = models.ManyToManyField(
-        Contragent,
-        through='DigitalKeyContact',
-        through_fields=('digital_key', 'contragent')
-    )
+    description = models.TextField(null=True)
+    date_start = models.DateField(null=True)
+    date_end = models.DateField(null=True)
+    type = models.ForeignKey(KeyType, null=True)
+    assignment = models.ForeignKey(KeyAssignment, null=True)
+    cert_holder = models.ForeignKey(Employee, null=True)
+    key_receiver = models.ForeignKey(Employee, null=True)
+
+
+    # contacts = models.ManyToManyField(
+    #     Contragent,
+    #     through='DigitalKeyContact',
+    #     through_fields=('digital_key', 'contragent')
+    # )
 
     def __str__(self):
         return self.name
@@ -69,7 +73,7 @@ class DigitalKeyContact(models.Model):
     )
 
     digital_key = models.ForeignKey(DigitalKey, on_delete=models.CASCADE)
-    contragent = models.ForeignKey(Contragent, on_delete=models.CASCADE)
+    contragent = models.ForeignKey(Employee, on_delete=models.CASCADE)
     type = models.CharField(max_length=1, choices=_dkc_types)
 
     def __str__(self):

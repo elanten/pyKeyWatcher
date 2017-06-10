@@ -1,6 +1,6 @@
 from django import forms
 
-from contragent.models import ContactType, Contragent, ContactInfo
+from contragent.models import ContactType, Employee, ContactInfo
 
 # detail_type_list = list((detail.id, detail.name) for detail in ContactType.objects.all())
 
@@ -11,7 +11,7 @@ class ContragentForm(forms.ModelForm):
             return self.instance.id
 
     class Meta:
-        model = Contragent
+        model = Employee
         fields = ['name', 'description']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
