@@ -1,5 +1,6 @@
 * text=auto
 
+*.min.js binary
 *.eot binary
 *.ttf binary
 *.woff binary
