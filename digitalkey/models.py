@@ -1,7 +1,7 @@
 from django.db import models
 import datetime
 from django.utils import timezone
-from contragent.models import Employee
+from employee.models import Employee, EmployeeGroup
 
 import logging
 
@@ -20,61 +20,66 @@ class KeyType(models.Model):
 
 class KeyAssignment(models.Model):
     name = models.CharField(max_length=200)
-    description = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.name
+
+
+class KeyLocation(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
 
     def __str__(self):
         return self.name
 
 
 class DigitalKey(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=255)
     serial = models.CharField(max_length=200)
-    description = models.TextField(null=True)
-    date_start = models.DateField(null=True)
-    date_end = models.DateField(null=True)
-    type = models.ForeignKey(KeyType, null=True)
-    assignment = models.ForeignKey(KeyAssignment, null=True)
-    cert_holder = models.ForeignKey(Employee, null=True)
-    key_receiver = models.ForeignKey(Employee, null=True)
+    description = models.TextField(blank=True)
 
+    date_begin = models.DateField(blank=True, null=True)
+    date_expire = models.DateField(blank=True, null=True)
+    renewal_time = models.PositiveIntegerField(blank=True, default=0)
 
-    # contacts = models.ManyToManyField(
-    #     Contragent,
-    #     through='DigitalKeyContact',
-    #     through_fields=('digital_key', 'contragent')
-    # )
+    type = models.ForeignKey(KeyType, blank=True, null=True)
+    assignment = models.ForeignKey(KeyAssignment, blank=True, null=True)
+    location = models.ForeignKey(KeyLocation, blank=True, null=True)
+
+    cert_holder = models.ForeignKey(Employee, blank=True, null=True, related_name='cert_set')
+    key_receiver = models.ForeignKey(Employee, blank=True, null=True, related_name='key_set')
+    employee_group = models.ForeignKey(EmployeeGroup, blank=True, null=True)
+
+    copy_of = models.ForeignKey('DigitalKey', blank=True, null=True,
+                                on_delete=models.SET_NULL,
+                                limit_choices_to={'copy_of': None})
+
+    def get_copies(self):
+        return DigitalKey.objects.filter(copy_of=self)
+
+    def is_copy(self):
+        return bool(self.copy_of)
 
     def __str__(self):
         return self.name
 
-    def get_holders(self):
-        return self.contacts.filter(digitalkeycontact__type=DigitalKeyContact.HOLDER)
 
-    def get_contacts(self):
-        return self.contacts.filter(digitalkeycontact__type=DigitalKeyContact.CONTACT)
-
-    @classmethod
-    def get_keys_by_contact_id(cls, _id):
-        DigitalKey.objects.filter(contragent__contragent_id=_id)
-
-    def get_key_holders(self):
-        return self.contacts.filter(digitalkeycontact__type=DigitalKeyContact.HOLDER).distinct()
-
-    def get_key_contacts(self):
-        return self.contacts.filter(digitalkeycontact__type=DigitalKeyContact.CONTACT).distinct()
-
-
-class DigitalKeyContact(models.Model):
-    HOLDER = 'h'
-    CONTACT = 'c'
-    _dkc_types = (
-        (HOLDER, 'holder'),
-        (CONTACT, 'contact'),
-    )
-
-    digital_key = models.ForeignKey(DigitalKey, on_delete=models.CASCADE)
-    contragent = models.ForeignKey(Employee, on_delete=models.CASCADE)
-    type = models.CharField(max_length=1, choices=_dkc_types)
+class CertificationCenter(models.Model):
+    name = models.CharField(max_length=255)
+    site = models.URLField(blank=True)
+    description = models.TextField(blank=True)
 
     def __str__(self):
-        return '%s %s %s' % (self.digital_key, self.contragent, self.type)
+        return self.name
+
+
+class CertRequirements(models.Model):
+    name = models.CharField(max_length=255)
+    site = models.URLField(blank=True)
+    description = models.TextField(blank=True)
+    actual_date = models.DateField(blank=True)
+    center = models.ForeignKey(CertificationCenter)
+
+    def __str__(self):
+        return self.name

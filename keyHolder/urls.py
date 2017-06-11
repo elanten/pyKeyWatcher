@@ -21,6 +21,6 @@ from .views import index
 urlpatterns = [
     url(r'^admin/', admin.site.urls, name='admin'),
     url(r'^keys/', include('digitalkey.urls')),
-    url(r'^contragents/', include('contragent.urls')),
+    url(r'^contragents/', include('employee.urls')),
     url(r'^$', index, name='index'),
 ]

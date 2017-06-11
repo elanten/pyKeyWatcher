@@ -1,11 +1,11 @@
 from django import forms
 
-from contragent.models import ContactType, Employee, ContactInfo
+from employee.models import ContactType, Employee, ContactInfo
 
 # detail_type_list = list((detail.id, detail.name) for detail in ContactType.objects.all())
 
 
-class ContragentForm(forms.ModelForm):
+class EmployeeForm(forms.ModelForm):
     def get_id(self):
         if self.instance:
             return self.instance.id
@@ -19,12 +19,12 @@ class ContragentForm(forms.ModelForm):
         }
 
 
-class ContragentDetailForm(forms.ModelForm):
+class EmployeeDetailForm(forms.ModelForm):
     error_css_class = 'bg-danger'
     required_css_class = 'required'
 
     def __init__(self, *args, **kwargs):
-        super(ContragentDetailForm, self).__init__(*args, **kwargs)
+        super(EmployeeDetailForm, self).__init__(*args, **kwargs)
         self.fields['contact_type'].empty_label = None
         # self.auto_id = False
 
@@ -36,9 +36,9 @@ class ContragentDetailForm(forms.ModelForm):
 
     class Meta:
         model = ContactInfo
-        fields = ['contact_type', 'value']
+        fields = ['type', 'value']
         widgets = {
-            'contact_type': forms.Select(attrs={'class': 'form-control select-noarrow'}),
+            'type': forms.Select(attrs={'class': 'form-control select-noarrow'}),
             'value': forms.TextInput(attrs={'class': 'form-control'})
         }
 

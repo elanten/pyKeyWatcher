@@ -1,73 +1,36 @@
-from digitalkey.models import DigitalKey, KeyType, DigitalKeyContact, KeyAssignment
-from contragent.models import Employee, ContactType, ContactInfo
+from digitalkey.models import *
+from employee.models import *
 from django.utils import dateparse
 
-DigitalKeyContact.objects.all().delete()
+c1 = ContactType(name='email')
+c2 = ContactType(name='post')
 
-DigitalKey.objects.all().delete()
-KeyType.objects.all().delete()
-KeyAssignment.objects.all().delete()
+c1.save()
+c2.save()
 
-ContactInfo.objects.all().delete()
-Employee.objects.all().delete()
-ContactType.objects.all().delete()
+emp1 = Employee(name='ФИО1')
+emp2 = Employee(name='ФИО2')
 
-eToken = KeyType.objects.create(name='eToken')
-ruToken = KeyType.objects.create(name='ruToken')
+emp1.save()
+emp2.save()
 
-email = ContactType.objects.create(name='почта')
-phone = ContactType.objects.create(name='телефон')
+emp1.contactinfo_set.create(value='test@mail.io', type=c1)
+emp1.contactinfo_set.create(value='123 45 67', type=c2)
 
-loc1 = KeyAssignment(name='Госзакупки').save()
-loc2 = KeyAssignment(name='Росаккредитация').save()
+grp1 = EmployeeGroup.objects.create(name='Группа 1')
+grp1.members.add(emp1, emp2)
 
-con1 = Employee.objects.create(name='Фамилия Имя Отчество', description='Описание')
-con2 = Employee.objects.create(name='ООО Организация', description='Описание организации')
+k1 = KeyType.objects.create(name="eToken")
+k2 = KeyType.objects.create(name="ruToken")
 
-con3 = Employee.objects.create(name='Дьячкова Алла Куприяновна', description='Описание Дьячкова Алла Куприяновна')
-con4 = Employee.objects.create(name='Матвеева Клавдия Иринеевна', description='Описание Матвеева Клавдия Иринеевна')
-con5 = Employee.objects.create(name='Кулакова Жанна Богдановна', description='Описание Кулакова Жанна Богдановна')
-con6 = Employee.objects.create(name='Медведьев Герман Валерьянович',
-                               description='Описание Медведьев Герман Валерьянович')
-con7 = Employee.objects.create(name='Блохина Кира Лукьяновна', description='Описание Блохина Кира Лукьяновна')
-con8 = Employee.objects.create(name='Белоусова Евфросиния Агафоновна',
-                               description='Описание Белоусова Евфросиния Агафоновна')
-con9 = Employee.objects.create(name='Сергеев Кондрат Владленович', description='Описание Сергеев Кондрат Владленович')
-con10 = Employee.objects.create(name='Колесников Мэлор Сергеевич', description='Описание Колесников Мэлор Сергеевич')
-con11 = Employee.objects.create(name='Ларионова Иванна Улебовна', description='Описание Ларионова Иванна Улебовна')
-con12 = Employee.objects.create(name='Яковлев Альвиан Матвеевич', description='Описание Яковлев Альвиан Матвеевич')
-con13 = Employee.objects.create(name='ООО БГБ 123', description='Описание БайнетГамаБук')
-con14 = Employee.objects.create(name='ООО БКИ', description='Описание БитКлавИнфо')
-con15 = Employee.objects.create(name='ООО Qwe 123', description='Описание Quick Wild Eyes')
+ka1 = KeyAssignment.objects.create(name="Госсакупки")
+ka2 = KeyAssignment.objects.create(name="Росчтототам")
 
+kl1 = KeyLocation.objects.create(name="Склад 1")
+kl2 = KeyLocation.objects.create(name="Склад 2")
 
-for con in Employee.objects.all():
-    con.contactinfo_set.create(contact_type=email, value="test@test.io")
-    con.contactinfo_set.create(contact_type=email, value="123 45 67")
-
-key1 = DigitalKey.objects.create(
-    name='Ключ 1', serial='SN-1111', expire=dateparse.parse_date('2017-05-30'),
-    key_type=eToken, description='111', key_allocation=loc1
-)
-key2 = DigitalKey.objects.create(
-    name='Ключ 2', serial='SN-2222', expire=dateparse.parse_date('2017-06-30'),
-    key_type=eToken, description='222', key_allocation=loc2
-)
-key3 = DigitalKey.objects.create(
-    name='Ключ 3', serial='SN-3333', expire=dateparse.parse_date('2017-07-30'),
-    key_type=eToken, description='333'
-)
-key4 = DigitalKey.objects.create(
-    name='Ключ 4', serial='SN-4444', expire=dateparse.parse_date('2017-08-30'),
-    key_type=eToken, description='444'
-)
-key5 = DigitalKey.objects.create(
-    name='Ключ 5', serial='SN-5555', expire=dateparse.parse_date('2017-09-30'),
-    key_type=eToken, description='555'
-)
-
-DigitalKeyContact(type='h', digital_key=key1, contragent=con1).save()
-DigitalKeyContact(type='c', digital_key=key1, contragent=con2).save()
-DigitalKeyContact(type='h', digital_key=key2, contragent=con1).save()
-DigitalKeyContact(type='c', digital_key=key2, contragent=con1).save()
-DigitalKeyContact(type='c', digital_key=key2, contragent=con2).save()
+key1 = DigitalKey(name="Ключ 1", serial='id-098765', type=k1, assignment=ka1, location=kl1, renewal_time=14,
+                  cert_holder=emp1, key_receiver=emp1, employee_group=grp1, date_expire=timezone.now())
+key1.save()
+key2 = DigitalKey(name="Ключ 2", serial='id-12345', type=k2, assignment=ka2, location=kl2, copy_of=key1)
+key2.save()

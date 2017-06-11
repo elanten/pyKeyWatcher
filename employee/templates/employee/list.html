@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div id="toolbar">
+{% comment %}    <div id="toolbar">
         <div class="form-inline" role="form">
-            <a href="{% url 'contragent:add' %}" class="btn btn-default">
+            <a href="{% url 'employee:add' %}" class="btn btn-default">
                 <span class="glyphicon glyphicon-plus"></span>
             </a>
         </div>
-    </div>
+    </div>{% endcomment %}
     <table data-toggle="table"
            data-height="700"
            data-toolbar="#toolbar"
@@ -18,10 +18,10 @@
         </tr>
         </thead>
         <tbody>
-        {% for contragent in contragents %}
+        {% for employee in employees %}
             <tr style="display:none;">
-                <td><a href="{% url 'contragent:show_by_id' contragent.id %}">{{ contragent.name }}</a></td>
-                <td>{{ contragent.description }}</td>
+                <td><a href="{% url 'employee:show_by_id' employee.id %}">{{ employee.name }}</a></td>
+                <td>{{ employee.description }}</td>
             </tr>
         {% endfor %}
         </tbody>

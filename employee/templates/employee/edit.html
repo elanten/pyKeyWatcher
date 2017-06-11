@@ -9,7 +9,7 @@
                     <div class="panel-heading">
                         Контрагент:
                         {% if contragent_form.get_id %}
-                        <a id="btn-remove" href="{% url 'contragent:remove' contragent_form.get_id %}">
+                        <a id="btn-remove" href="{% url 'employee:remove' contragent_form.get_id %}">
                             <span class="glyphicon glyphicon-trash pull-right"></span>
                         </a>
                         {% endif %}
@@ -88,8 +88,8 @@
         <div class="row">
             <div class="col-md-12">
                 <input type="submit" value="Save" class="btn btn-default">
-                <a href="{% if contragent_form.id.value %}{% url 'contragent:show_by_id' contragent_form.id.value %}
-                {% else %}{% url 'contragent:all' %}{% endif %}"
+                <a href="{% if contragent_form.id.value %}{% url 'employee:show_by_id' contragent_form.id.value %}
+                {% else %}{% url 'employee:all' %}{% endif %}"
                    class="btn btn-default">Cancel</a>
             </div>
         </div>

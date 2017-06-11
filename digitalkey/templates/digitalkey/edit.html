@@ -103,7 +103,7 @@
                     load: function (query, callback) {
                         if (query.length < 3) return callback();
                         $.ajax({
-                            url: '{% url 'contragent:json_by_name' %}',
+                            url: '{% url 'employee:json_by_name' %}',
                             type: 'GET',
                             data: {
                                 search: query

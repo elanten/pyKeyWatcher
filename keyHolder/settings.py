@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'digitalkey.apps.DigitalkeyConfig',
-    'contragent.apps.ContragentConfig'
+    'employee.apps.ContragentConfig'
 ]
 
 MIDDLEWARE = [

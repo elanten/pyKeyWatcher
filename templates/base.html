@@ -47,14 +47,14 @@
 
                         <li><a href="{% url 'digital_key:all' %}">Ключи</a></li>
                         <li class="dropdown">
-                            <a href="{% url 'contragent:all' %}" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                            <a href="{% url 'employee:all' %}" class="dropdown-toggle" data-toggle="dropdown" role="button"
                                aria-haspopup="true"
                                aria-expanded="false">Контакты <span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="{% url 'contragent:all' %}">Все контакты</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="{% url 'contragent:all_by_type' 'holders' %}">Держатели ключей</a></li>
-                                <li><a href="{% url 'contragent:all_by_type' 'contacts' %}">Контакты по ключам</a></li>
+                                <li><a href="{% url 'employee:all' %}">Все контакты</a></li>
+{#                                <li role="separator" class="divider"></li>#}
+{#                                <li><a href="{% url 'employee:all_by_type' 'holders' %}">Держатели ключей</a></li>#}
+{#                                <li><a href="{% url 'employee:all_by_type' 'contacts' %}">Контакты по ключам</a></li>#}
                             </ul>
                         </li>
                         <li><a href="/admin">Настройки</a></li> {# Для сайта светить админку плохо, но тут можно #}

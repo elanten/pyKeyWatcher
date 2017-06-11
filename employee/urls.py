@@ -2,7 +2,7 @@ from django.conf.urls import url
 
 from . import views
 
-app_name = 'contragent'
+app_name = 'employee'
 urlpatterns = [
     url(r'^$', views.show_all, name='all'),
     url(r'^show/(?P<ctype>holders|contacts)$', views.show_all_by_type, name='all_by_type'),

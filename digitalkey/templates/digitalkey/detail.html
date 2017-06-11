@@ -4,24 +4,31 @@
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    Инормация по ключу:
-                    <a href="{% url 'digital_key:edit_by_id' view.key.id%}">
+                    Основная информация:
+                    <a href="{% url 'digital_key:edit_by_id' view.key.id %}">
                         <span class="glyphicon glyphicon-pencil pull-right"></span>
                     </a>
                 </div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-5">
-                            <p><strong>Наименование:</strong>{{ view.key.name }}</p>
+                            <p><strong>Наименование:</strong> {{ view.key.name }}</p>
                             <p><strong>Номер:</strong> {{ view.key.serial }}</p>
-                            <p><strong>Назначение:</strong> {{ view.key.key_allocation }}</p>
-                            <p><strong>Истекает:</strong>
-                                <span class="text-default">{{ view.key.expire|date:'Y-m-d' }}</span>
-                                <span>({{ view.days_left }} days)</span>
+                            <p><strong>Сертификат:</strong>
+                                {% if view.key.cert_holder %}
+                                    <a href="{% url 'employee:show_by_id' view.key.cert_holder_id %}">{{ view.key.cert_holder }}</a>
+                                {% endif %}
                             </p>
                         </div>
                         <div class="col-md-7">
-                            <p><strong>Тип:</strong> {{ view.key.key_type }}</p>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Тип носителя:</strong> {{ view.key.type }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Назначение:</strong> {{ view.key.assignment }}</p>
+                                </div>
+                            </div>
                             <p><strong>Описание:</strong></p>
                             <pre>{{ view.key.description }}</pre>
                         </div>
@@ -33,21 +40,47 @@
     <div class="row">
         <div class="col-md-6">
             <div class="panel panel-default">
-                <div class="panel-heading">Держатели ключа</div>
+                <div class="panel-heading">Дополнительная информация</div>
                 <div class="panel-body">
-                    {% for contragent in view.key.get_holders %}
-                    <p><a href="{% url 'contragent:show_by_id' contragent.id %}">{{ contragent.name }}</a></p>
-                    {% endfor %}
+                    {% if view.key.key_receiver %}
+                        <p><strong>Выдан:</strong>
+                            <a href="{% url 'employee:show_by_id' view.key.key_receiver_id %}">{{ view.key.key_receiver }}</a>
+                        </p>
+                    {% endif %}
+                    {% if view.key.employee_group %}
+                        <p><strong>Группа держателей:</strong>
+                            <a href="#">{{ view.key.employee_group }}</a>
+                        </p>
+                    {% endif %}
+                    {% if view.key.location %}
+                        <p><strong>Место хранения:</strong> {{ view.key.location }}</p>
+                    {% endif %}
+                    {% if view.key.copy_of %}
+                        <p><strong>Оригинал ключа:</strong>
+                            <a href="{% url 'digital_key:show_by_id' view.key.copy_of_id %}">{{ view.key.copy_of }}</a>
+                        </p>
+                    {% endif %}
+                    {% if view.copies_count %}
+                        <p><strong>Копии ключа:</strong></p>
+                        <ul>
+                            {% for copy in view.key.get_copies %}
+                                <li><a href="{% url 'digital_key:show_by_id' copy.id %}">{{ copy }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                 </div>
             </div>
         </div>
         <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">Контакты</div>
+            <div class="panel panel-{{ view.style }}">
+                <div class="panel-heading">Сроки действия:</div>
                 <div class="panel-body">
-                    {% for contragent in view.key.get_contacts %}
-                    <p><a href="{% url 'contragent:show_by_id' contragent.id %}">{{ contragent.name }}</a></p>
-                    {% endfor %}
+                    <p><strong>Начало:</strong> {{ view.key.date_begin|date:'Y-m-d' }}</p>
+                    <p class="text-{{ view.style }}"><strong>Окончание:</strong> {{ view.key.date_expire|date:'Y-m-d' }}</p>
+                    <p><strong>Истекает через:</strong> {{ view.days_left }} дней</p>
+                    {% if view.key.renewal_time %}
+                        <p><strong>Сроки перевыпуска:</strong> {{ view.key.renewal_time }} дней</p>
+                    {% endif %}
                 </div>
             </div>
         </div>
