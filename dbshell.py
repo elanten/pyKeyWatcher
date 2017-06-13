@@ -36,8 +36,8 @@ cent1 = CertificationCenter.objects.create(name='Удостоверяющий ц
 
 cent2 = CertificationCenter.objects.create(name='Удостоверяющий центр 2', description='1234')
 
-cr1 = CertRequirements.objects.create(name='Требования 1', center=cent1, description='123',
-                                      actual_date=timezone.now())
+cr1 = CertRequirement.objects.create(name='Требования 1', center=cent1, description='123',
+                                     actual_date=timezone.now())
 
 key1 = DigitalKey(name="Ключ 1", serial='id-098765', type=k1, assignment=ka1, location=kl1, renewal_time=14,
                   cert_holder=emp1, key_receiver=emp1, employee_group=grp1, date_expire=timezone.now(),

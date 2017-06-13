@@ -12,11 +12,10 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-5">
-                            <p><strong>Наименование:</strong>
+                            <p>
+                                <strong>Наименование:</strong> {{ cert_center.name }}
                                 {% if cert_center.link %}
-                                    <a href="{{ cert_center.link }}" target="_blank">{{ cert_center.name }}</a>
-                                {% else %}
-                                    {{ cert_center.name }}
+                                    <a href="{{ cert_center.link }}" target="_blank">(сайт)</a>
                                 {% endif %}
                             </p>
                         </div>
@@ -35,8 +34,9 @@
                 <div class="panel-heading">Требования:</div>
                 <div class="panel-body">
                     <ul>
-                        {% for reqirement in requirements %}
-                            <li><a href="{% url 'cert_center:show_req_by_id' reqirement.id %}">{{ reqirement.name }}</a>
+                        {% for requirement in requirements %}
+                            <li>
+                                <a href="{% url 'cert_center:show_req_by_id' requirement.id %}">{{ requirement.name }}</a>
                             </li>
                         {% endfor %}
                     </ul>

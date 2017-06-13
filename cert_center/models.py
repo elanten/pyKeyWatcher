@@ -11,7 +11,7 @@ class CertificationCenter(models.Model):
         return self.name
 
 
-class CertRequirements(models.Model):
+class CertRequirement(models.Model):
     name = models.CharField(max_length=255)
     link = models.URLField(blank=True)
     description = models.TextField(blank=True)

@@ -40,6 +40,10 @@ class DigitalKey(models.Model):
     serial = models.CharField(max_length=200)
     description = models.TextField(blank=True)
 
+    pin_user = models.CharField(max_length=255, blank=True, default="")
+    pin_admin = models.CharField(max_length=255, blank=True, default="")
+    pin_container = models.CharField(max_length=255, blank=True, default="")
+
     date_begin = models.DateField(blank=True, null=True)
     date_expire = models.DateField(blank=True, null=True)
     renewal_time = models.PositiveIntegerField(blank=True, default=0)

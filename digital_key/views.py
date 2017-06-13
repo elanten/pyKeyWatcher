@@ -1,9 +1,12 @@
 from django.core.handlers.wsgi import WSGIHandler
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, get_list_or_404, redirect
 
 from .forms import DigitalKeyForm
 from .support import DigitalKeyWrapper
 from .models import DigitalKey
+
+import csv
 
 
 def show_all(request):
@@ -12,6 +15,17 @@ def show_all(request):
     return render(request, 'digital_key/list.html', {
         'key_views': key_views
     })
+
+
+def export_csv_all(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="keys.csv"'
+    response.charset = 'utf-8'
+    writer = csv.writer(response)
+    writer.writerow(['name','serial','date_expire', 'type'])
+    for key in DigitalKey.objects.all():
+        writer.writerow([key.name, key.serial, key.date_expire, key.type])
+    return response
 
 
 def show_by_id(request, key_id):
