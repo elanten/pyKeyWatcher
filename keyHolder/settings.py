@@ -37,8 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'digitalkey.apps.DigitalkeyConfig',
-    'employee.apps.ContragentConfig'
+    'digital_key.apps.DigitalkeyConfig',
+    'employee.apps.ContragentConfig',
+    'cert_center.apps.CertCenterConfig'
 ]
 
 MIDDLEWARE = [

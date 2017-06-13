@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Основная информация:
+{#                    <a href="{% url 'cert_center:show_by_id' cert_center.id %}">#}
+{#                        <span class="glyphicon glyphicon-pencil pull-right"></span>#}
+{#                    </a>#}
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <p><strong>Наименование:</strong>
+                                {% if requirement.link %}
+                                    <a href="{{ requirement.link }}" target="_blank">{{ requirement.name }}</a>
+                                {% else %}
+                                    {{ requirement.name }}
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="col-md-7">
+                            <p><strong>Описание:</strong></p>
+                            <pre>{{ requirement.description }}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">Требования:</div>
+                <div class="panel-body">
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">Сроки действия:</div>
+                <div class="panel-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

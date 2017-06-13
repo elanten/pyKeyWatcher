@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div id="toolbar">
+        <div class="form-inline" role="form">
+            {#            <a href="{% url 'digital_key:add' %}" class="btn btn-default">#}
+            {#                <span class="glyphicon glyphicon-plus"></span>#}
+            {#            </a>#}
+        </div>
+    </div>
+    <table data-toggle="table"
+           data-height="700"
+           data-toolbar="#toolbar"
+           data-search="true">
+        <thead>
+        <tr style="display: none">
+            <th data-sortable="true">Название</th>
+            <th data-sortable="true">Ссылка</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for center in centers %}
+            <tr style="display: none">
+                <td><a href="{% url 'cert_center:show_by_id' center.id %}">{{ center.name }}</a></td>
+                <td>
+                    {% if center.link %}
+                        <a href="{{ center.link }}" target="_blank">{{ center.link }}</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

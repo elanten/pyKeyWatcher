@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import Textarea
 from django.forms.widgets import TextInput, Select
-from digitalkey.models import DigitalKey
+from digital_key.models import DigitalKey
 
 
 class DigitalKeyForm(forms.ModelForm):

@@ -9,14 +9,14 @@ from .models import DigitalKey
 def show_all(request):
     keys = DigitalKey.objects.all()
     key_views = list(DigitalKeyWrapper(key) for key in keys)
-    return render(request, 'digitalkey/list.html', {
+    return render(request, 'digital_key/list.html', {
         'key_views': key_views
     })
 
 
 def show_by_id(request, key_id):
     digital_key = get_object_or_404(DigitalKey, pk=key_id)
-    return render(request, 'digitalkey/detail.html', {
+    return render(request, 'digital_key/detail.html', {
         'view': DigitalKeyWrapper(digital_key)
     })
 
@@ -45,7 +45,7 @@ def edit_by_id(request: WSGIHandler, key_id):
     else:
         digital_key_form = DigitalKeyForm(instance=digital_key)
 
-    return render(request, 'digitalkey/edit.html', {
+    return render(request, 'digital_key/edit.html', {
         'digitalkey_form': digital_key_form,
         # 'holders': holders,
         # 'contacts': contacts
@@ -69,7 +69,7 @@ def create(request):
             return redirect('digital_key:show_by_id', digital_key.id)
     else:
         digital_key_form = DigitalKeyForm(instance=digital_key)
-    return render(request, 'digitalkey/edit.html', {
+    return render(request, 'digital_key/edit.html', {
         'digitalkey_form': digital_key_form,
         'holders': [],
         'contacts': []

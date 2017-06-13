@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Группа:
+{#                    <a href="{% url 'employee:edit_by_id' employee.id %}">#}
+{#                        <span class="glyphicon glyphicon-pencil pull-right"></span>#}
+{#                    </a>#}
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-4"><strong>{{ group.name }}</strong></div>
+                        <div class="col-md-8">{{ group.description }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Участники:
+                </div>
+                <div class="panel-body">
+                    <ul>
+                        {% for member in members %}
+                            <li><a href="{% url 'employee:show_by_id' member.id %}">{{ member }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">Ключи:</div>
+                <div class="panel-body">
+                    <ul>
+                        {% for key in keys %}
+                            <li><a href="{% url 'digital_key:show_by_id' key.id %}">{{ key }}</a></li>
+                        {% endfor %}
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

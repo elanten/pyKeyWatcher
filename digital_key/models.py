@@ -1,9 +1,10 @@
-from django.db import models
-import datetime
-from django.utils import timezone
-from employee.models import Employee, EmployeeGroup
-
 import logging
+
+from django.db import models
+from django.utils import timezone
+
+from employee.models import Employee, EmployeeGroup
+from cert_center.models import CertificationCenter
 
 # Create your models here.
 
@@ -51,6 +52,8 @@ class DigitalKey(models.Model):
     key_receiver = models.ForeignKey(Employee, blank=True, null=True, related_name='key_set')
     employee_group = models.ForeignKey(EmployeeGroup, blank=True, null=True)
 
+    cert_center = models.ForeignKey(CertificationCenter, blank=True, null=True)
+
     copy_of = models.ForeignKey('DigitalKey', blank=True, null=True,
                                 on_delete=models.SET_NULL,
                                 limit_choices_to={'copy_of': None})
@@ -61,25 +64,15 @@ class DigitalKey(models.Model):
     def is_copy(self):
         return bool(self.copy_of)
 
-    def __str__(self):
-        return self.name
+    def days_left(self):
+        if self.date_expire:
+            delta = self.date_expire - timezone.now().date()
+            return delta.days
+        else:
+            return 0
 
-
-class CertificationCenter(models.Model):
-    name = models.CharField(max_length=255)
-    site = models.URLField(blank=True)
-    description = models.TextField(blank=True)
-
-    def __str__(self):
-        return self.name
-
-
-class CertRequirements(models.Model):
-    name = models.CharField(max_length=255)
-    site = models.URLField(blank=True)
-    description = models.TextField(blank=True)
-    actual_date = models.DateField(blank=True)
-    center = models.ForeignKey(CertificationCenter)
+    def days_before_renewal(self):
+        return self.days_left() - self.renewal_time
 
     def __str__(self):
         return self.name

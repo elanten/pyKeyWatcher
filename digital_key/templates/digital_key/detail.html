@@ -49,7 +49,8 @@
                     {% endif %}
                     {% if view.key.employee_group %}
                         <p><strong>Группа держателей:</strong>
-                            <a href="#">{{ view.key.employee_group }}</a>
+                            <a href="{% url 'employee:show_group_by_id' view.key.employee_group_id %}">
+                                {{ view.key.employee_group }}</a>
                         </p>
                     {% endif %}
                     {% if view.key.location %}
@@ -58,13 +59,16 @@
                     {% if view.key.copy_of %}
                         <p><strong>Оригинал ключа:</strong>
                             <a href="{% url 'digital_key:show_by_id' view.key.copy_of_id %}">{{ view.key.copy_of }}</a>
+                            <span class="label label-default">{{ view.key.copy_of.location }}</span>
                         </p>
                     {% endif %}
                     {% if view.copies_count %}
                         <p><strong>Копии ключа:</strong></p>
                         <ul>
                             {% for copy in view.key.get_copies %}
-                                <li><a href="{% url 'digital_key:show_by_id' copy.id %}">{{ copy }}</a></li>
+                                <li><a href="{% url 'digital_key:show_by_id' copy.id %}">{{ copy }}</a>
+                                    <span class="label label-default">{{ copy.location }}</span>
+                                </li>
                             {% endfor %}
                         </ul>
                     {% endif %}
@@ -76,7 +80,8 @@
                 <div class="panel-heading">Сроки действия:</div>
                 <div class="panel-body">
                     <p><strong>Начало:</strong> {{ view.key.date_begin|date:'Y-m-d' }}</p>
-                    <p class="text-{{ view.style }}"><strong>Окончание:</strong> {{ view.key.date_expire|date:'Y-m-d' }}</p>
+                    <p class="text-{{ view.style }}"><strong>Окончание:</strong> {{ view.key.date_expire|date:'Y-m-d' }}
+                    </p>
                     <p><strong>Истекает через:</strong> {{ view.days_left }} дней</p>
                     {% if view.key.renewal_time %}
                         <p><strong>Сроки перевыпуска:</strong> {{ view.key.renewal_time }} дней</p>

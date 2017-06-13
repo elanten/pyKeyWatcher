@@ -20,7 +20,8 @@ from .views import index
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls, name='admin'),
-    url(r'^keys/', include('digitalkey.urls')),
-    url(r'^contragents/', include('employee.urls')),
+    url(r'^keys/', include('digital_key.urls')),
+    url(r'^employees/', include('employee.urls')),
+    url(r'^centers/', include('cert_center.urls')),
     url(r'^$', index, name='index'),
 ]

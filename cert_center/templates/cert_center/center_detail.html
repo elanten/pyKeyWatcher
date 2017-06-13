@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Основная информация:
+                    {#                    <a href="{% url 'cert_center:show_by_id' cert_center.id %}">#}
+                    {#                        <span class="glyphicon glyphicon-pencil pull-right"></span>#}
+                    {#                    </a>#}
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <p><strong>Наименование:</strong>
+                                {% if cert_center.link %}
+                                    <a href="{{ cert_center.link }}" target="_blank">{{ cert_center.name }}</a>
+                                {% else %}
+                                    {{ cert_center.name }}
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="col-md-7">
+                            <p><strong>Описание:</strong></p>
+                            <pre>{{ cert_center.description }}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">Требования:</div>
+                <div class="panel-body">
+                    <ul>
+                        {% for reqirement in requirements %}
+                            <li><a href="{% url 'cert_center:show_req_by_id' reqirement.id %}">{{ reqirement.name }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">Ключи:</div>
+                <div class="panel-body">
+                    <ul>
+                        {% for view in keys %}
+                            <li><a href="{% url 'digital_key:show_by_id' view.key.id %}">{{ view.key }}</a>
+                                <span class="label label-{{ view.get_label_class }}">{{ view.key.date_expire }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
