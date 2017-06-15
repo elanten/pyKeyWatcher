@@ -38,11 +38,11 @@ class KeyLocation(models.Model):
 class DigitalKey(models.Model):
     name = models.CharField(max_length=255)
     serial = models.CharField(max_length=200)
-    description = models.TextField(blank=True)
+    description = models.TextField(blank=True, null=True, default='')
 
-    pin_user = models.CharField(max_length=255, blank=True, default="")
-    pin_admin = models.CharField(max_length=255, blank=True, default="")
-    pin_container = models.CharField(max_length=255, blank=True, default="")
+    pin_user = models.CharField(max_length=255, blank=True, default='')
+    pin_admin = models.CharField(max_length=255, blank=True, default='')
+    pin_container = models.CharField(max_length=255, blank=True, default='')
 
     date_begin = models.DateField(blank=True, null=True)
     date_expire = models.DateField(blank=True, null=True)
@@ -74,9 +74,6 @@ class DigitalKey(models.Model):
             return delta.days
         else:
             return 0
-
-    def days_before_renewal(self):
-        return self.days_left() - self.renewal_time
 
     def __str__(self):
         return self.name

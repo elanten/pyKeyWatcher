@@ -23,5 +23,6 @@ urlpatterns = [
     url(r'^keys/', include('digital_key.urls')),
     url(r'^employees/', include('employee.urls')),
     url(r'^centers/', include('cert_center.urls')),
+    url(r'^manuals/', include('key_manual.urls')),
     url(r'^$', index, name='index'),
 ]

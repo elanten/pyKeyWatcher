@@ -8,7 +8,7 @@
         </div>
     </div>
     <table data-toggle="table"
-           data-height="700"
+           data-height="500"
            data-toolbar="#toolbar"
            data-search="true"
            data-sort-name="expire"
@@ -21,19 +21,19 @@
             <th data-sortable="true">Тип</th>
             <th data-sortable="true">Назначение</th>
             <th data-sortable="true">Хранение</th>
-            <th data-sortable="true">Копия</th>
+            <th data-sortable="true">Копий</th>
         </tr>
         </thead>
         <tbody>
         {% for view in key_views %}
-            <tr class="{{ view.style }}" style="display: none">
+            <tr class="{{ view.get_label_class }}" style="display: none">
                 <td><a href="{% url 'digital_key:show_by_id' view.key.id %}">{{ view.key.name }}</a></td>
-                <td>{{ view.key.serial }}</td>
-                <td>{{ view.key.date_expire|date:'Y-m-d' }}</td>
-                <td>{{ view.key.type }}</td>
-                <td>{{ view.key.assignment }}</td>
-                <td>{{ view.key.location }}</td>
-                <td>{{ view.copy_type }}</td>
+                <td>{{ view.key.serial|default:'' }}</td>
+                <td>{{ view.key.date_expire|date:'Y-m-d'|default:'нет срока' }}</td>
+                <td>{{ view.key.type|default:'' }}</td>
+                <td>{{ view.key.assignment|default:'' }}</td>
+                <td>{{ view.key.location|default:'' }}</td>
+                <td>{{ view.copies_count|default:'' }}</td>
             </tr>
         {% endfor %}
         </tbody>

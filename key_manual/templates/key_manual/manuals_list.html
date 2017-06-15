@@ -14,14 +14,20 @@
         <thead>
         <tr style="display: none">
             <th data-sortable="true">Название</th>
-            <th data-sortable="true">Ключей</th>
+            <th data-sortable="true">Тип</th>
+            <th data-sortable="true">Теги</th>
         </tr>
         </thead>
         <tbody>
-        {% for center in centers %}
+        {% for manual in manuals %}
             <tr style="display: none">
-                <td><a href="{% url 'cert_center:show_by_id' center.id %}">{{ center.name }}</a></td>
-                <td>{{ center.digitalkey_set.count }}</td>
+                <td><a href="{% url 'key_manual:show_by_id' manual.id %}">{{ manual.name }}</a></td>
+                <td>{{ manual.type.name | default:'' }}</td>
+                <td>
+                    {% for tag in manual.get_all_tags %}
+                        {{ tag }} <br>
+                    {% endfor %}
+                </td>
             </tr>
         {% endfor %}
         </tbody>

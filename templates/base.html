@@ -1,5 +1,6 @@
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>{% block title %}Ключи{% endblock %}</title>
 
     <link rel="stylesheet" href="/static/styles/lib/bootstrap.min.css"/>
@@ -44,22 +45,24 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
-
                         <li><a href="{% url 'digital_key:all' %}">Ключи</a></li>
                         <li><a href="{% url 'employee:all' %}">Сотрудники</a></li>
-{#                        <li class="dropdown">#}
-{#                            <a href="{% url 'employee:all' %}" class="dropdown-toggle" data-toggle="dropdown" role="button"#}
-{#                               aria-haspopup="true"#}
-{#                               aria-expanded="false">Контакты <span class="caret"></span></a>#}
-{#                            <ul class="dropdown-menu">#}
-{#                                <li><a href="{% url 'employee:all' %}">Все контакты</a></li>#}
-{#                                <li role="separator" class="divider"></li>#}
+                        <li><a href="{% url 'cert_center:all' %}" title="Удостоверяющие центры">УЦ</a></li>
+                        <li><a href="{% url 'key_manual:all' %}">Инструкции</a></li>
+                          <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                               aria-haspopup="true" aria-expanded="false">
+                                Экспорт<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'digital_key:export_all_csv' %}">Ключи</a></li>
+                                <li role="separator" class="divider"></li>
 {#                                <li><a href="{% url 'employee:all_by_type' 'holders' %}">Держатели ключей</a></li>#}
 {#                                <li><a href="{% url 'employee:all_by_type' 'contacts' %}">Контакты по ключам</a></li>#}
-{#                            </ul>#}
-{#                        </li>#}
-                        <li><a href="{% url 'cert_center:all' %}" title="Удостоверяющие центры">УЦ</a></li>
-                        <li><a href="/admin">Настройки</a></li> {# Для сайта светить админку плохо, но тут можно #}
+                            </ul>
+                        </li>
+                        <li><a href="/admin">Админка</a></li>
+                        {# Для сайта светить админку плохо, но тут можно #}
                     </ul>
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->

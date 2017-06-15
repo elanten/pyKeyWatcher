@@ -8,20 +8,20 @@
         </div>
     </div>{% endcomment %}
     <table data-toggle="table"
-           data-height="700"
+           data-height="500"
            data-toolbar="#toolbar"
            data-search="true">
         <thead>
         <tr style="display:none;">
             <th data-sortable="true">Контрагент</th>
-            <th>Описание</th>
+            <th data-sortable="true">Сертификаты</th>
         </tr>
         </thead>
         <tbody>
         {% for employee in employees %}
             <tr style="display:none;">
                 <td><a href="{% url 'employee:show_by_id' employee.id %}">{{ employee.name }}</a></td>
-                <td>{{ employee.description }}</td>
+                <td>{{ employee.cert_set.count }}</td>
             </tr>
         {% endfor %}
         </tbody>

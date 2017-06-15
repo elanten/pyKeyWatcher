@@ -1,6 +1,7 @@
 from digital_key.models import *
 from employee.models import *
 from cert_center.models import *
+from key_manual.models import *
 from django.utils import dateparse, timezone
 
 c1 = ContactType(name='email')
@@ -45,3 +46,11 @@ key1 = DigitalKey(name="Ключ 1", serial='id-098765', type=k1, assignment=ka1
 key1.save()
 key2 = DigitalKey(name="Ключ 2", serial='id-12345', type=k2, assignment=ka2, location=kl2, copy_of=key1)
 key2.save()
+
+mt1 = ManualType.objects.create(name='Установка')
+mt2 = ManualType.objects.create(name='Использование')
+mt3 = ManualType.objects.create(name='Ключи')
+
+man1 = Manual.objects.create(name="Инструкция 1", type=mt1, content="Краткое описание\nинструкции",
+                             link='http://www.roskazna.ru/gis/')
+man2 = Manual.objects.create(name="Инструкция 2")

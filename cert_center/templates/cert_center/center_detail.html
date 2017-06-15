@@ -51,6 +51,9 @@
                         {% for view in keys %}
                             <li><a href="{% url 'digital_key:show_by_id' view.key.id %}">{{ view.key }}</a>
                                 <span class="label label-{{ view.get_label_class }}">{{ view.key.date_expire }}</span>
+                                {% if view.key.location %}
+                                    <span class="label label-default">{{ view.key.location }}</span>
+                                {% endif %}
                             </li>
                         {% endfor %}
                     </ul>

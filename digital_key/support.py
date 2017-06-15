@@ -5,33 +5,24 @@ from django.utils import timezone
 class DigitalKeyWrapper:
     def __init__(self, digitalkey: DigitalKey, default_style='default'):
         self.key = digitalkey
-        self.style = default_style
-        self.days_left = 0
+        self.default_style = default_style
         self.is_copy = digitalkey.is_copy()
-        self.copy_type = 'Копия' if self.is_copy else 'Оригинал'
-        self.copies_count = digitalkey.get_copies().count()
-        if digitalkey.date_expire:
-            timedelta = digitalkey.date_expire - timezone.now().date()
-            self.days_left = timedelta.days
-            if self.days_left < 30:
-                self.style = 'danger'
-            elif self.days_left < 60:
-                self.style = 'warning'
+        self.days_left = digitalkey.days_left()
+        self.days_before_renewal = self.days_left - digitalkey.renewal_time
 
-    def name(self):
-        return self.__key.name
+    def copies_count(self):
+        return self.key.get_copies().count()
 
-    def serial(self):
-        return self.__key.serial
-
-    def description(self):
-        return self.__key.description
-
-    def date_begin(self):
-        return self.__key.date_begin if not self.is_copy else self.__key.copy_of.date_begin
-
-    def date_expire(self):
-        return self.__key.date_expire if not self.is_copy else self.__key.copy_of.date_expire
+    def get_label_class(self):
+        if not self.key.date_expire:
+            return self.default_style
+        delta = self.days_before_renewal
+        if delta < 14:
+            return 'danger'
+        elif delta < 30:
+            return 'warning'
+        else:
+            return 'success'
 
 
 class EmployeeKeyWrapper(DigitalKeyWrapper):

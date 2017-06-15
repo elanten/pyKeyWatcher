@@ -1,6 +1,10 @@
+import datetime
+
 from django.http import Http404, JsonResponse
 from django.shortcuts import render, get_object_or_404, get_list_or_404, redirect
 from django.forms import formset_factory, modelformset_factory
+
+from digital_key.support import DigitalKeyWrapper
 from employee.forms import *
 from digital_key.models import DigitalKey
 from .models import Employee, ContactInfo, EmployeeGroup
@@ -12,29 +16,31 @@ class KeyListWrapper:
         keys = {}
 
         for key in employee.cert_set.all():
-            keys[key.pk] = KeyWrapper(key, in_cert=True)
+            keys[key.pk] = EmployeeKeyWrapper(key, in_cert=True)
 
         for key in employee.key_set.all():
-            wkey = keys.get(key.pk, KeyWrapper(key))
+            wkey = keys.get(key.pk, EmployeeKeyWrapper(key))
             wkey.in_hold = True
             keys[key.pk] = wkey
 
         grp_ids = employee.employeegroup_set.values('id')
         for key in DigitalKey.objects.filter(employee_group__in=grp_ids):
-            wkey = keys.get(key.pk, KeyWrapper(key))
+            wkey = keys.get(key.pk, EmployeeKeyWrapper(key))
             wkey.in_group = True
             keys[key.pk] = wkey
 
         self.keys = keys
 
     def __iter__(self):
-        return iter(self.keys.values())
+        return iter(sorted(
+            self.keys.values(),
+            key=lambda e: (e.key.date_expire if e.key.date_expire else datetime.date(9999, 1, 1))
+        ))
 
 
-class KeyWrapper:
+class EmployeeKeyWrapper(DigitalKeyWrapper):
     def __init__(self, digital_key: DigitalKey, in_cert=False, in_hold=False, in_group=False):
-        self.name = digital_key.name
-        self.pk = digital_key.pk
+        super(EmployeeKeyWrapper, self).__init__(digital_key, default_style='success')
         self.in_cert = in_cert
         self.in_hold = in_hold
         self.in_group = in_group

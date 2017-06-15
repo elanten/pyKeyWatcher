@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'digital_key.apps.DigitalkeyConfig',
     'employee.apps.ContragentConfig',
-    'cert_center.apps.CertCenterConfig'
+    'cert_center.apps.CertCenterConfig',
+    'key_manual.apps.KeyManualConfig'
 ]
 
 MIDDLEWARE = [

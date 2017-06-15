@@ -14,21 +14,23 @@
                         <div class="col-md-5">
                             <p><strong>Наименование:</strong> {{ view.key.name }}</p>
                             <p><strong>Номер:</strong> {{ view.key.serial }}</p>
+                            <p><strong>Тип носителя:</strong> {{ view.key.type }}</p>
                             <p><strong>Сертификат:</strong>
                                 {% if view.key.cert_holder %}
                                     <a href="{% url 'employee:show_by_id' view.key.cert_holder_id %}">{{ view.key.cert_holder }}</a>
                                 {% endif %}
                             </p>
+                            {% if view.key.cert_center %}
+                                <p>
+                                    <strong>Удостоверяющий центр:</strong>
+                                    <a href="{% url 'cert_center:show_by_id' view.key.cert_center_id %}">
+                                        {{ view.key.cert_center }}
+                                    </a>
+                                </p>
+                            {% endif %}
                         </div>
                         <div class="col-md-7">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <p><strong>Тип носителя:</strong> {{ view.key.type }}</p>
-                                </div>
-                                <div class="col-md-6">
-                                    <p><strong>Назначение:</strong> {{ view.key.assignment }}</p>
-                                </div>
-                            </div>
+                            <p><strong>Назначение:</strong> {{ view.key.assignment }}</p>
                             <p><strong>Описание:</strong></p>
                             <pre>{{ view.key.description }}</pre>
                         </div>
@@ -76,13 +78,18 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="panel panel-{{ view.style }}">
+            <div class="panel panel-{{ view.get_label_class }}">
                 <div class="panel-heading">Сроки действия:</div>
                 <div class="panel-body">
-                    <p><strong>Начало:</strong> {{ view.key.date_begin|date:'Y-m-d' }}</p>
-                    <p class="text-{{ view.style }}"><strong>Окончание:</strong> {{ view.key.date_expire|date:'Y-m-d' }}
-                    </p>
-                    <p><strong>Истекает через:</strong> {{ view.days_left }} дней</p>
+                    {% if view.key.date_begin %}
+                        <p><strong>Начало:</strong> {{ view.key.date_begin|date:'Y-m-d' }}</p>
+                    {% endif %}
+                    {% if view.key.date_expire %}
+                        <p class="text-{{ view.get_label_class }}">
+                            <strong>Окончание:</strong> {{ view.key.date_expire|date:'Y-m-d' }}
+                        </p>
+                        <p class="text-{{ view.get_label_class }}"><strong>Истекает через:</strong> {{ view.days_left }} дней</p>
+                    {% endif %}
                     {% if view.key.renewal_time %}
                         <p><strong>Сроки перевыпуска:</strong> {{ view.key.renewal_time }} дней</p>
                     {% endif %}

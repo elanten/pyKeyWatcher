@@ -35,15 +35,19 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Ключи:</div>
                 <div class="panel-body">
-                    {% for linked_key in linked_keys %}
-                        <p><a href="{% url 'digital_key:show_by_id' linked_key.pk %}">{{ linked_key.name }}</a>
-                            {% if linked_key.in_cert %}
+                    {% for view in linked_keys %}
+                        <p>
+                            <a href="{% url 'digital_key:show_by_id' view.key.id %}">{{ view.key }}</a>
+                            {% if view.key.date_expire %}
+                                <span class="label label-{{ view.get_label_class }}">{{ view.key.date_expire|date:'d.m.y' }}</span>
+                            {% endif %}
+                            {% if view.in_cert %}
                                 <span class="label label-warning">Сертификат</span>
                             {% endif %}
-                            {% if linked_key.in_hold %}
+                            {% if view.in_hold %}
                                 <span class="label label-primary">Получатель</span>
                             {% endif %}
-                            {% if linked_key.in_group %}
+                            {% if view.in_group %}
                                 <span class="label label-success">В группе держателей</span>
                             {% endif %}
                         </p>
