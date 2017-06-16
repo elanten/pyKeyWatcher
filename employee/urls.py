@@ -4,7 +4,7 @@ from . import views
 
 app_name = 'employee'
 urlpatterns = [
-    url(r'^$', views.show_all, name='all'),
+    url(r'^$', views.EmployeeListView.as_view(), name='all'),
     url(r'^show/(?P<cid>[0-9]+)$', views.show_by_id, name='show_by_id'),
     url(r'^show_group/(?P<pk>\d+)$', views.show_group_by_id, name='show_group_by_id'),
     url(r'^json/search$', views.show_all_by_name, name='json_by_name'),

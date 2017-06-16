@@ -3,6 +3,7 @@ import datetime
 from django.http import Http404, JsonResponse
 from django.shortcuts import render, get_object_or_404, get_list_or_404, redirect
 from django.forms import formset_factory, modelformset_factory
+from django.views import generic
 
 from digital_key.support import DigitalKeyWrapper
 from employee.forms import *
@@ -46,10 +47,17 @@ class EmployeeKeyWrapper(DigitalKeyWrapper):
         self.in_group = in_group
 
 
-def show_all(request):
-    return render(request, 'employee/list.html', {
-        'employees': get_list_or_404(Employee)
-    })
+class EmployeeListView(generic.ListView):
+    model = Employee
+    template_name = 'employee/list.html'
+    allow_empty = True
+
+
+
+# def show_all(request):
+#     return render(request, 'employee/list.html', {
+#         'employees': Employee.objects.all()
+#     })
 
 
 def show_by_id(request, cid: int):
