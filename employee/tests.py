@@ -14,7 +14,7 @@ def create_group(name):
     return EmployeeGroup.objects.create(name=name)
 
 
-class EmployeeTest(TestCase):
+class EmployeeViewTest(TestCase):
     def test_url_all(self):
         response = self.client.get(reverse('employee:all'))
         self.assertEqual(response.status_code, 200)
@@ -36,7 +36,7 @@ class EmployeeTest(TestCase):
         self.assertNotContains(response, 'Emp 3')
 
 
-class EmployeeGroupTest(TestCase):
+class EmployeeGroupViewTest(TestCase):
     def test_url_show_group_by_id(self):
         grp = create_group('Test group')
         response = self.client.get(reverse('employee:show_group_by_id', args=(grp.id,)))

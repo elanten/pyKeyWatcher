@@ -28,7 +28,7 @@ class Manual(models.Model):
     path = models.FilePathField(path='c:/temp', recursive=True, blank=True, null=True)
 
     type = models.ForeignKey(ManualType, blank=True, null=True)
-    tags = models.ManyToManyField(ManualTag, blank=True, null=True)
+    tags = models.ManyToManyField(ManualTag, blank=True)
 
     def get_all_tags(self):
         return self.tags.all()
