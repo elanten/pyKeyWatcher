@@ -50,8 +50,8 @@ class EmployeeKeyWrapper(DigitalKeyWrapper):
 class EmployeeListView(generic.ListView):
     model = Employee
     template_name = 'employee/list.html'
+    context_object_name = 'employees'
     allow_empty = True
-
 
 
 # def show_all(request):
@@ -156,3 +156,15 @@ def show_all_by_name(request):
             return response
     else:
         return JsonResponse({})
+
+
+class EmployeeGroupsList(generic.ListView):
+    model = EmployeeGroup
+    template_name = 'employee/group_list.html'
+    context_object_name = 'groups'
+    allow_empty = True
+
+def group_all(request):
+    groups = EmployeeGroup.objects.all()
+
+    return None

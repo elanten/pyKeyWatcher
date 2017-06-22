@@ -2,10 +2,11 @@ from django.core.handlers.wsgi import WSGIHandler
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, get_list_or_404, redirect
 from openpyxl.worksheet import Worksheet
+from django.views import generic
 
 from .forms import DigitalKeyForm
 from .support import DigitalKeyWrapper
-from .models import DigitalKey
+from .models import DigitalKey, KeyLocation
 
 from openpyxl import Workbook
 from openpyxl.writer.excel import save_virtual_workbook
@@ -145,3 +146,19 @@ def remove_by_id(request, key_id):
     digital_key = get_object_or_404(DigitalKey, pk=key_id)
     digital_key.delete()
     return redirect('digital_key:all')
+
+
+def location_detail(request, pk):
+    location = get_object_or_404(KeyLocation, pk=pk)
+    key_views = [DigitalKeyWrapper(key) for key in location.digitalkey_set.all()]
+    return render(request, 'digital_key/location_detail.html', {
+        'keylocation': location,
+        'key_views': key_views
+    })
+
+
+def location_list(request):
+    locations = KeyLocation.objects.all()
+    return render(request, 'digital_key/location_list.html', {
+        'locations': locations
+    })

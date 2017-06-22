@@ -13,15 +13,17 @@
            data-search="true">
         <thead>
         <tr style="display:none;">
-            <th data-sortable="true">Контрагент</th>
-            <th data-sortable="true">Сертификаты</th>
+            <th data-sortable="true">Группа</th>
+            <th data-sortable="true">Сотрудники</th>
+            <th data-sortable="true">Ключи</th>
         </tr>
         </thead>
         <tbody>
-        {% for employee in employees %}
+        {% for group in groups %}
             <tr style="display:none;">
-                <td><a href="{% url 'employee:show_by_id' employee.id %}">{{ employee.name }}</a></td>
-                <td>{{ employee.cert_set.count }}</td>
+                <td><a href="{% url 'employee:group_detail' group.id %}">{{ group.name }}</a></td>
+                <td>{{ group.employee_set.count }}</td>
+                <td>{{ group.digitalkey_set.count }}</td>
             </tr>
         {% endfor %}
         </tbody>

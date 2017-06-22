@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Место хранения ключей{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Место хранения: <strong>{{ keylocation.name }}</strong>
+                    {#                    <a href="{% url 'cert_center:show_by_id' cert_center.id %}">#}
+                    {#                        <span class="glyphicon glyphicon-pencil pull-right"></span>#}
+                    {#                    </a>#}
+                </div>
+                <div class="panel-body">
+                    {{ keylocation.description|linebreaks }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">Ключи:</div>
+                <div class="panel-body">
+                    <ul>
+                        {% for view in key_views %}
+                            <li><a href="{% url 'digital_key:show_by_id' view.key.id %}">{{ view.key }}</a>
+                                <span class="label label-{{ view.get_label_class }}">{{ view.key.date_expire|date:'d.m.y' }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

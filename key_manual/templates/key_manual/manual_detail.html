@@ -4,7 +4,10 @@
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    Основная информация:
+                <strong>{{ manual.name }}</strong>
+                    {% if manual.link %}
+                        <a href="{{ manual.link }}" target="_blank">(ссылка)</a>
+                    {% endif %}
                     {#                    <a href="{% url 'cert_center:show_by_id' cert_center.id %}">#}
                     {#                        <span class="glyphicon glyphicon-pencil pull-right"></span>#}
                     {#                    </a>#}
@@ -12,16 +15,12 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-10">
-                            <p><strong>{{ manual.name }}</strong></p>
                             {{ manual.content | linebreaks }}
                             <hr>
                             <p>
                                 {% if manual.path %}
                                     <a class="btn btn-default"
                                        href="{% url 'key_manual:get_by_id' manual.id %}">Скачать</a>
-                                {% endif %}
-                                {% if manual.link %}
-                                    <a class="btn btn-default" href="{{ manual.link }}">Перейти по ссылке</a>
                                 {% endif %}
                             </p>
                         </div>

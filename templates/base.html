@@ -45,8 +45,29 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
-                        <li><a href="{% url 'digital_key:all' %}">Ключи</a></li>
-                        <li><a href="{% url 'employee:all' %}">Сотрудники</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle"data-toggle="dropdown" role="button"
+                               aria-haspopup="true" aria-expanded="false">
+                                Ключи
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'digital_key:all' %}">Все ключи</a></li>
+                                <li><a href="{% url 'digital_key:loc_all' %}">Места хранения</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle"data-toggle="dropdown" role="button"
+                               aria-haspopup="true" aria-expanded="false">
+                                Сотрудники
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'employee:all' %}">Сотрудники</a></li>
+                                <li><a href="{% url 'employee:group_all' %}">Группы сотрудников</a></li>
+                            </ul>
+                        </li>
                         <li><a href="{% url 'cert_center:all' %}" title="Удостоверяющие центры">УЦ</a></li>
                         <li><a href="{% url 'key_manual:all' %}">Инструкции</a></li>
                           <li class="dropdown">

@@ -8,7 +8,7 @@
         </div>
     </div>
     <table data-toggle="table"
-           data-height="500"
+           data-height="700"
            data-toolbar="#toolbar"
            data-search="true"
            data-sort-name="expire"
@@ -21,7 +21,7 @@
             <th data-sortable="true">Тип</th>
             <th data-sortable="true">Назначение</th>
             <th data-sortable="true">Хранение</th>
-            <th data-sortable="true">Копий</th>
+            <th data-sortable="true">УЦ</th>
         </tr>
         </thead>
         <tbody>
@@ -33,7 +33,9 @@
                 <td>{{ view.key.type|default:'' }}</td>
                 <td>{{ view.key.assignment|default:'' }}</td>
                 <td>{{ view.key.location|default:'' }}</td>
-                <td>{{ view.copies_count|default:'' }}</td>
+                <td>{% if view.key.cert_center_id %}
+                    <a href="{% url 'cert_center:show_by_id' view.key.cert_center_id %}">{{ view.key.cert_center }}</a>
+                {% endif %}</td>
             </tr>
         {% endfor %}
         </tbody>

@@ -60,7 +60,7 @@ for row in ws.iter_rows('A2:M39'):
         assignment=assignments.get(assign, None), location=locations.get(loc, None),
         cert_holder=employees.get(cert, None), key_receiver=employees.get(hold, None),
         date_begin=start, date_expire=end, copy_of=(keys[copy] if copy else None),
-        cert_center=(centers[center] if center else None)
+        cert_center=(centers[center] if center else None), employee_group=groups[group]
     )
 
 wb.close()

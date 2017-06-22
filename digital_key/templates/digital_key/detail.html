@@ -56,7 +56,9 @@
                         </p>
                     {% endif %}
                     {% if view.key.location %}
-                        <p><strong>Место хранения:</strong> {{ view.key.location }}</p>
+                        <p><strong>Место хранения:</strong>
+                            <a href="{% url 'digital_key:loc_detail' view.key.location_id %}">{{ view.key.location }}</a>
+                        </p>
                     {% endif %}
                     {% if view.key.copy_of %}
                         <p><strong>Оригинал ключа:</strong>
