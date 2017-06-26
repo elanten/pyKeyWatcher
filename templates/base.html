@@ -53,6 +53,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a href="{% url 'digital_key:all' %}">Все ключи</a></li>
+                                <li><a href="{% url 'digital_key:sys_all' %}">Системы</a></li>
                                 <li><a href="{% url 'digital_key:loc_all' %}">Места хранения</a></li>
                             </ul>
                         </li>
@@ -76,7 +77,7 @@
                                 Экспорт<span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a href="{% url 'digital_key:export_all_xlsx' %}">Ключи</a></li>
+                                <li><a href="{% url 'export:xlsx' %}">XLSX</a></li>
                                 <li role="separator" class="divider"></li>
 {#                                <li><a href="{% url 'employee:all_by_type' 'holders' %}">Держатели ключей</a></li>#}
 {#                                <li><a href="{% url 'employee:all_by_type' 'contacts' %}">Контакты по ключам</a></li>#}

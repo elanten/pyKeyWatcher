@@ -51,7 +51,7 @@
                     {% endif %}
                     {% if view.key.employee_group %}
                         <p><strong>Группа держателей:</strong>
-                            <a href="{% url 'employee:show_group_by_id' view.key.employee_group_id %}">
+                            <a href="{% url 'employee:group_detail' view.key.employee_group_id %}">
                                 {{ view.key.employee_group }}</a>
                         </p>
                     {% endif %}
@@ -59,6 +59,14 @@
                         <p><strong>Место хранения:</strong>
                             <a href="{% url 'digital_key:loc_detail' view.key.location_id %}">{{ view.key.location }}</a>
                         </p>
+                    {% endif %}
+                    {% if view.key.work_systems.count %}
+                        <p><strong>Используется в системах:</strong></p>
+                        <ul>
+                            {% for system in view.key.work_systems.all %}
+                                <li><a href="{% url 'digital_key:sys_detail' system.id %}">{{ system.name }}</a></li>
+                            {% endfor %}
+                        </ul>
                     {% endif %}
                     {% if view.key.copy_of %}
                         <p><strong>Оригинал ключа:</strong>
@@ -90,7 +98,8 @@
                         <p class="text-{{ view.get_label_class }}">
                             <strong>Окончание:</strong> {{ view.key.date_expire|date:'Y-m-d' }}
                         </p>
-                        <p class="text-{{ view.get_label_class }}"><strong>Истекает через:</strong> {{ view.days_left }} дней</p>
+                        <p class="text-{{ view.get_label_class }}"><strong>Истекает через:</strong> {{ view.days_left }}
+                            дней</p>
                     {% endif %}
                     {% if view.key.renewal_time %}
                         <p><strong>Сроки перевыпуска:</strong> {{ view.key.renewal_time }} дней</p>

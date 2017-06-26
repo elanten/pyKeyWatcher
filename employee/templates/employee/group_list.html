@@ -22,7 +22,7 @@
         {% for group in groups %}
             <tr style="display:none;">
                 <td><a href="{% url 'employee:group_detail' group.id %}">{{ group.name }}</a></td>
-                <td>{{ group.employee_set.count }}</td>
+                <td>{{ group.members.count }}</td>
                 <td>{{ group.digitalkey_set.count }}</td>
             </tr>
         {% endfor %}

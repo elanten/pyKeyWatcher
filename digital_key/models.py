@@ -35,6 +35,15 @@ class KeyLocation(models.Model):
         return self.name
 
 
+class WorkSystem(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    link = models.URLField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+
 class DigitalKey(models.Model):
     name = models.CharField(max_length=255)
     serial = models.CharField(max_length=200)
@@ -57,6 +66,8 @@ class DigitalKey(models.Model):
     employee_group = models.ForeignKey(EmployeeGroup, blank=True, null=True)
 
     cert_center = models.ForeignKey(CertificationCenter, blank=True, null=True)
+
+    work_systems = models.ManyToManyField(WorkSystem)
 
     copy_of = models.ForeignKey('DigitalKey', blank=True, null=True,
                                 on_delete=models.SET_NULL,

@@ -1,19 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import *
-
-
 # Create your tests here.
-
-def create_cert_center(name):
-    return CertificationCenter.objects.create(name=name)
-
-
-def create_cert_requirement(name, center=None):
-    if not center:
-        center = create_cert_center('TEST CENTER FOR ' + name)
-    return CertRequirement.objects.create(name=name, center=center)
+from cert_center.tests.utils import create_cert_center, create_cert_requirement
 
 
 class CertificationCenterViewTest(TestCase):

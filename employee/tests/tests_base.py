@@ -1,17 +1,9 @@
 from django.test import TestCase
-
 # Create your tests here.
 from django.urls import reverse
 
 from employee.models import *
-
-
-def create_employee(name):
-    return Employee.objects.create(name=name)
-
-
-def create_group(name):
-    return EmployeeGroup.objects.create(name=name)
+from employee.tests.utils import create_employee, create_group
 
 
 class EmployeeViewTest(TestCase):
@@ -20,17 +12,17 @@ class EmployeeViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_url_all(self):
-        create_employee('TEST EMP 1')
-        create_employee('TEST EMP 2')
+        emp1 = create_employee('TEST EMP 1')
+        emp2 = create_employee('TEST EMP 2')
         response = self.client.get(reverse('employee:all'))
-        self.assertContains(response, 'TEST EMP 1')
-        self.assertContains(response, 'TEST EMP 2')
+        self.assertContains(response, emp1.name)
+        self.assertContains(response, emp2.name)
 
     def test_url_show_by_id(self):
         emp = create_employee('Test employee')
         response = self.client.get(reverse('employee:show_by_id', args=(emp.id,)))
         count = Employee.objects.count()
-        self.assertContains(response, 'Test employee')
+        self.assertContains(response, emp.name)
         self.assertEqual(count, 1)
 
     def test_url_json_by_name(self):

@@ -24,5 +24,6 @@ urlpatterns = [
     url(r'^employees/', include('employee.urls')),
     url(r'^centers/', include('cert_center.urls')),
     url(r'^manuals/', include('key_manual.urls')),
+    url(r'^export/', include('export.urls')),
     url(r'^$', index, name='index'),
 ]

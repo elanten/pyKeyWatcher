@@ -20,7 +20,7 @@
             <th data-field="expire" data-sortable="true">Истекает</th>
             <th data-sortable="true">Тип</th>
             <th data-sortable="true">Назначение</th>
-            <th data-sortable="true">Хранение</th>
+            <th data-sortable="true">Системы</th>
             <th data-sortable="true">УЦ</th>
         </tr>
         </thead>
@@ -32,7 +32,14 @@
                 <td>{{ view.key.date_expire|date:'Y-m-d'|default:'нет срока' }}</td>
                 <td>{{ view.key.type|default:'' }}</td>
                 <td>{{ view.key.assignment|default:'' }}</td>
-                <td>{{ view.key.location|default:'' }}</td>
+                {#                <td>{{ view.key.location|default:'' }}</td>#}
+                <td>
+                    {% if view.key.work_systems.count %}
+                        {% for sys in view.key.work_systems.all %}
+                            <a href="{% url 'digital_key:sys_detail' sys.id %}">{{ sys.name }}</a><br>
+                        {% endfor %}
+                    {% endif %}
+                </td>
                 <td>{% if view.key.cert_center_id %}
                     <a href="{% url 'cert_center:show_by_id' view.key.cert_center_id %}">{{ view.key.cert_center }}</a>
                 {% endif %}</td>

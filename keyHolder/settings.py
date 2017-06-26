@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'digital_key.apps.DigitalkeyConfig',
     'employee.apps.ContragentConfig',
     'cert_center.apps.CertCenterConfig',
-    'key_manual.apps.KeyManualConfig'
+    'key_manual.apps.KeyManualConfig',
+    'export.apps.ExportConfig'
 ]
 
 MIDDLEWARE = [
