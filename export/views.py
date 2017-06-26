@@ -3,12 +3,14 @@ from django.shortcuts import render
 
 # Create your views here.
 from openpyxl import Workbook
-from openpyxl.styles import Alignment, Font
+from openpyxl.styles import Alignment, Font, PatternFill, colors
 from openpyxl.worksheet import Worksheet
 from openpyxl.writer.excel import save_virtual_workbook
 
+from cert_center.models import CertificationCenter
 from digital_key.models import DigitalKey
 from digital_key.views import _to_string
+from employee.models import Employee, EmployeeGroup
 
 
 def export_key_xlsx(request):
@@ -16,16 +18,13 @@ def export_key_xlsx(request):
 
     alignment = Alignment(horizontal='center', vertical='center')
     bold = Font(bold=True)
+    fill_success = PatternFill('solid', fgColor='5CB85C')
+    fill = PatternFill("solid", fgColor="DDDDDD")
 
     ws: Worksheet = wb.active
     ws.title = 'Ключи'
     ws.append(['Назначение', 'номер', 'тип', 'имя', 'начало', 'конец', 'фио',
                'выдан', 'группа', 'уц', 'хранение', 'описание', 'оригинал', 'системы'])
-
-    for cell in ws[1]:
-        cell.font = bold
-        cell.alignment = alignment
-
     for key in DigitalKey.objects.all():
         _ass = _to_string(key.assignment)
         _ser = _to_string(key.serial)
@@ -43,6 +42,34 @@ def export_key_xlsx(request):
         _sys = ', '.join(sys.name for sys in key.work_systems.all())
         ws.append([_ass, _ser, _typ, _nam, _beg, _exp, _cer, _rec, _emp, _cen, _loc, _des, _cop, _sys])
 
+    for cols in ws.iter_cols(min_col=6, max_col=6, min_row=2):
+        for cell in cols:
+            cell.fill = fill_success
+
+    ws = wb.create_sheet('Люди')
+    ws.append(['Имя', 'Контакты', 'Описание'])
+    for employee in Employee.objects.all():
+        _nam = _to_string(employee.name)
+        _con = ', '.join('{}:{}'.format(con.type.name, con.value) for con in employee.contactinfo_set.all())
+        _des = _to_string(employee.description)
+        ws.append([_nam, _con, _des])
+
+    ws = wb.create_sheet('')
+    ws.append(['Название', 'Члены', 'Описание'])
+    for group in EmployeeGroup.objects.all():
+        _nam = group.name
+        _mem = ', '.join(mmb.name for mmb in group.members.all())
+        _des = group.description
+        ws.append([_nam, _mem, _des])
+
+    ws = wb.create_sheet('УЦ')
+    ws.append(['Название', 'Ссылка', 'Описание'])
+    for center in CertificationCenter.objects.all():
+        _nam = center.name
+        _lin = center.link
+        _des = center.description
+        ws.append([_nam, _lin, _des])
+
     # ws['A1'] = 42
     #
     # # Rows can also be appended
@@ -55,10 +82,15 @@ def export_key_xlsx(request):
     #
     # ws['A4'] = datetime.datetime.now()
 
-    # fix column width
-    for column_cells in ws.columns:
-        length = max(len(_to_string(cell.value)) for cell in column_cells)
-        ws.column_dimensions[column_cells[0].column].width = length + 2
+    for sheet in wb.worksheets:
+        # set header format
+        for cell in sheet[1]:
+            cell.font = bold
+            cell.alignment = alignment
+        # fix column width
+        for column_cells in sheet.columns:
+            length = max(len(_to_string(cell.value)) for cell in column_cells)
+            sheet.column_dimensions[column_cells[0].column].width = length + 2
 
     response = HttpResponse(save_virtual_workbook(wb), content_type=wb.mime_type)
     response['Content-Disposition'] = 'attachment; filename="keys.xlsx"'
