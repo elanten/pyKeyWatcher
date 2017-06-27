@@ -67,7 +67,7 @@ class DigitalKey(models.Model):
 
     cert_center = models.ForeignKey(CertificationCenter, blank=True, null=True)
 
-    work_systems = models.ManyToManyField(WorkSystem)
+    work_systems = models.ManyToManyField(WorkSystem, blank=True)
 
     copy_of = models.ForeignKey('DigitalKey', blank=True, null=True,
                                 on_delete=models.SET_NULL,

@@ -15,11 +15,12 @@
            data-sort-order="asc">
         <thead>
         <tr style="display: none">
-            <th data-sortable="true">Название</th>
-            <th data-sortable="true">Номер</th>
-            <th data-field="expire" data-sortable="true">Истекает</th>
-            <th data-sortable="true">Тип</th>
-            <th data-sortable="true">Назначение</th>
+            <th data-sortable="true" data-valign="middle">Название</th>
+            <th data-sortable="true" data-valign="middle">Номер</th>
+            <th data-field="expire" data-valign="middle" data-sortable="true">Истекает</th>
+            <th data-sortable="true" data-valign="middle">Тип</th>
+            <th data-sortable="true" data-valign="middle">Назначение</th>
+            <th data-sortable="true" data-valign="middle">Хранение</th>
             <th data-sortable="true">Системы</th>
             <th data-sortable="true">УЦ</th>
         </tr>
@@ -32,7 +33,7 @@
                 <td>{{ view.key.date_expire|date:'Y-m-d'|default:'нет срока' }}</td>
                 <td>{{ view.key.type|default:'' }}</td>
                 <td>{{ view.key.assignment|default:'' }}</td>
-                {#                <td>{{ view.key.location|default:'' }}</td>#}
+                <td>{{ view.key.location|default:'' }}</td>
                 <td>
                     {% if view.key.work_systems.count %}
                         {% for sys in view.key.work_systems.all %}
