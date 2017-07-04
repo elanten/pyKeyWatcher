@@ -6,6 +6,8 @@ from django.db import models
 
 class Employee(models.Model):
     name = models.CharField(max_length=255)
+    name_full = models.CharField(max_length=255, blank=True, default='')
+
     description = models.TextField(blank=True, default="")
 
     def get_contact_info(self):
@@ -17,6 +19,8 @@ class Employee(models.Model):
 
 class EmployeeGroup(models.Model):
     name = models.CharField(max_length=255)
+    name_full = models.CharField(max_length=255, blank=True, default='')
+
     description = models.TextField(blank=True, default="")
     members = models.ManyToManyField(Employee)
 
@@ -34,6 +38,7 @@ class ContactType(models.Model):
 class ContactInfo(models.Model):
     type = models.ForeignKey(ContactType)
     value = models.CharField(max_length=200)
+
     employee = models.ForeignKey(Employee)
 
     def __str__(self):

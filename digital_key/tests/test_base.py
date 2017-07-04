@@ -1,4 +1,4 @@
-
+from django.contrib.auth.models import User
 from django.test import TestCase
 # Create your tests here.
 from django.urls import reverse
@@ -14,6 +14,15 @@ URL_SYSTEM_DETAIL = 'digital_key:sys_detail'
 
 
 class DigitalKeyViewTest(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        User.objects.create_user(username='tester', password='123')
+
+    def setUp(self):
+        super().setUp()
+        self.client.login(username='tester', password='123')
+
     def test_all_empty(self):
         response = self.client.get(reverse(URL_DIGITAL_KEY_ALL))
         self.assertEqual(response.status_code, 200)
@@ -46,6 +55,24 @@ class DigitalKeyViewTest(TestCase):
         self.assertContains(response, loc_url)
         self.assertContains(response, sys.name)
         self.assertContains(response, sys_url)
+
+
+class DigitalKeyViewTestNoLogin(TestCase):
+    # w/o logged in
+    def test_all_empty(self):
+        response = self.client.get(reverse(URL_DIGITAL_KEY_ALL))
+        self.assertEquals(response.status_code, 302)
+
+    def test_all(self):
+        key1 = create_key('TEST KEY 1')
+        key2 = create_key('TEST KEY 2')
+        response = self.client.get(reverse(URL_DIGITAL_KEY_ALL))
+        self.assertEquals(response.status_code, 302)
+
+    def test_url_detail_simple(self):
+        key = create_key('Test key')
+        response = self.client.get(reverse(URL_DIGITAL_KEY_DETAIL, args=(key.id,)))
+        self.assertEquals(response.status_code, 302)
 
 
 class KeyLocationViewTest(TestCase):

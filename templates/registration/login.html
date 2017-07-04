@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load extras %}
+{#{% block menu %}{% endblock %}#}
+{% block content %}
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <h3>Требуется вход в систему</h3>
+            <br>
+            <form method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.username|label_with_classes:'control-label' }}
+                    {{ form.username|field_with_classes:'form-control' }}
+                </div>
+                <div class="form-group">
+                    {{ form.password|label_with_classes:'control-label' }}
+                    {{ form.password|field_with_classes:'form-control' }}
+                </div>
+                <button type="submit" class="btn btn-default">Login</button>
+                <input type="hidden" name="next" value="{{ next }}">
+            </form>
+        </div>
+    </div>
+{% endblock %}

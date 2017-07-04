@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.test import TestCase
 from django.shortcuts import reverse
 
@@ -7,6 +8,15 @@ from employee.tests.utils import create_group, create_employee
 
 
 class DigitalKeyView(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        User.objects.create_user(username='tester', password='123')
+
+    def setUp(self):
+        super().setUp()
+        self.client.login(username='tester', password='123')
+
     def test_index_redirect(self):
         response = self.client.get('/', follow=True)
         self.assertRedirects(response, '/keys/')

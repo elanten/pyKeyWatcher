@@ -1,5 +1,11 @@
+from imaplib import Response_code
+
+from django.contrib.auth.decorators import login_required
 from django.core.handlers.wsgi import WSGIHandler
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.template.context import RequestContext
+from django.views.generic import ListView
 
 from .forms import DigitalKeyForm
 from .models import DigitalKey, KeyLocation, WorkSystem
@@ -10,6 +16,7 @@ def _to_string(obj, default=''):
     return str(obj) if obj else default
 
 
+@login_required()
 def show_all(request):
     keys = DigitalKey.objects.all()
     key_views = list(DigitalKeyWrapper(key) for key in keys)
@@ -17,7 +24,14 @@ def show_all(request):
         'key_views': key_views
     })
 
+# class KeyAllView(ListView):
+#     model = DigitalKey
+#     template_name = 'digital_key/list.html'
 
+
+
+
+@login_required()
 def show_by_id(request, key_id):
     digital_key = get_object_or_404(DigitalKey, pk=key_id)
     return render(request, 'digital_key/detail.html', {

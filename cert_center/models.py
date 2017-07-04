@@ -4,6 +4,8 @@ from django.db import models
 # Create your models here.
 class CertificationCenter(models.Model):
     name = models.CharField(max_length=255)
+    name_full = models.CharField(max_length=255, blank=True, default='')
+
     link = models.URLField(blank=True)
     description = models.TextField(blank=True)
 
@@ -13,6 +15,8 @@ class CertificationCenter(models.Model):
 
 class CertRequirement(models.Model):
     name = models.CharField(max_length=255)
+    name_full = models.CharField(max_length=255, blank=True, default='')
+
     link = models.URLField(blank=True)
     description = models.TextField(blank=True)
     actual_date = models.DateField(blank=True, null=True)

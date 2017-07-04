@@ -22,6 +22,8 @@ class ManualTag(models.Model):
 
 class Manual(models.Model):
     name = models.CharField(max_length=255)
+    name_full = models.CharField(max_length=255, blank=True, default='')
+
     content = models.TextField(blank=True, default='')
 
     link = models.URLField(blank=True, default='')

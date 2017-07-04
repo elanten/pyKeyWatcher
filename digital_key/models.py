@@ -21,6 +21,8 @@ class KeyType(models.Model):
 
 class KeyAssignment(models.Model):
     name = models.CharField(max_length=200)
+    name_full = models.CharField(max_length=255, blank=True, default='')
+
     description = models.TextField(blank=True)
 
     def __str__(self):
@@ -29,6 +31,8 @@ class KeyAssignment(models.Model):
 
 class KeyLocation(models.Model):
     name = models.CharField(max_length=255)
+    name_full = models.CharField(max_length=255, blank=True, default='')
+
     description = models.TextField(blank=True)
 
     def __str__(self):
@@ -37,6 +41,8 @@ class KeyLocation(models.Model):
 
 class WorkSystem(models.Model):
     name = models.CharField(max_length=255)
+    name_full = models.CharField(max_length=255, blank=True, default='')
+
     description = models.TextField(blank=True, null=True)
     link = models.URLField(max_length=255, blank=True, null=True)
 
@@ -46,6 +52,8 @@ class WorkSystem(models.Model):
 
 class DigitalKey(models.Model):
     name = models.CharField(max_length=255)
+    name_full = models.CharField(max_length=255, blank=True, default='')
+
     serial = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True, default='')
 

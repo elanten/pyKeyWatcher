@@ -19,11 +19,12 @@ from django.contrib import admin
 from .views import index
 
 urlpatterns = [
+    url(r'^$', index, name='index'),
+    url(r'^accounts/', include('django.contrib.auth.urls')),
     url(r'^admin/', admin.site.urls, name='admin'),
     url(r'^keys/', include('digital_key.urls')),
     url(r'^employees/', include('employee.urls')),
     url(r'^centers/', include('cert_center.urls')),
     url(r'^manuals/', include('key_manual.urls')),
     url(r'^export/', include('export.urls')),
-    url(r'^$', index, name='index'),
 ]

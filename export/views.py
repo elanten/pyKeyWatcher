@@ -58,10 +58,6 @@ def export_key_xlsx(request):
         _sys = ', '.join(sys.name for sys in key.work_systems.all())
         ws.append([_ass, _ser, _typ, _nam, _beg, _exp, _cer, _rec, _emp, _cen, _loc, _des, _cop, _sys])
 
-    # for cols in ws.iter_cols(min_col=6, max_col=6, min_row=2):
-    #     for cell in cols:
-    #         cell.fill = fill_success
-
     ws = wb.create_sheet('Люди')
     ws.append(['Имя', 'Контакты', 'Описание'])
     for employee in Employee.objects.all():
@@ -86,18 +82,6 @@ def export_key_xlsx(request):
         _des = center.description
         ws.append([_nam, _lin, _des])
 
-    # ws['A1'] = 42
-    #
-    # # Rows can also be appended
-    # ws.append(['ключ 1', 2, 3])
-    # ws.append(['ключ 1', 2, 3])
-    # ws.merge_cells('A2:A3')
-    # ws.append(['ключ 2', 2, 3])
-    # # Python types will automatically be converted
-    # import datetime
-    #
-    # ws['A4'] = datetime.datetime.now()
-
     for sheet in wb.worksheets:
         # set header format
         for cell in sheet[1]:
@@ -111,5 +95,4 @@ def export_key_xlsx(request):
 
     response = HttpResponse(save_virtual_workbook(wb), content_type=wb.mime_type)
     response['Content-Disposition'] = 'attachment; filename="keys.xlsx"'
-
     return response

@@ -1,7 +1,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Ключи{% endblock %}</title>
+    <title>{% block title %}ЭЦП - {{ user }}{% endblock %}</title>
 
     <link rel="stylesheet" href="/static/styles/lib/bootstrap.min.css"/>
 
@@ -83,8 +83,13 @@
 {#                                <li><a href="{% url 'employee:all_by_type' 'contacts' %}">Контакты по ключам</a></li>#}
                             </ul>
                         </li>
-                        <li><a href="/admin">Админка</a></li>
+                        <li><a href="/admin">Управление</a></li>
                         {# Для сайта светить админку плохо, но тут можно #}
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        {% if user.is_authenticated %}
+                            <li><a href="{% url 'logout' %}">Выход</a></li>
+                        {% endif %}
                     </ul>
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
