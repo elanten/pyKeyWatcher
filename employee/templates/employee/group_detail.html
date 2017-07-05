@@ -38,8 +38,14 @@
                 <div class="panel-heading">Ключи:</div>
                 <div class="panel-body">
                     <ul>
-                        {% for key in keys %}
-                            <li><a href="{% url 'digital_key:show_by_id' key.id %}">{{ key }}</a></li>
+                        {% for wrp in wrp_keys %}
+                            <li>
+                                <a href="{% url 'digital_key:show_by_id' wrp.key.id %}">{{ wrp.key }}</a>
+                                <span class="label label-{{ wrp.get_label_class }}">{{ wrp.key.date_expire|date:'d.m.y' }}</span>
+                                {% if wrp.key.location %}
+                                    <span class="label label-default">{{ wrp.key.location }}</span>
+                                {% endif %}
+                            </li>
                         {% endfor %}
 
                     </ul>

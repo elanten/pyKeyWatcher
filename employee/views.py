@@ -72,11 +72,11 @@ def show_by_id(request, cid: int):
 def show_group_by_id(request, pk):
     group = get_object_or_404(EmployeeGroup, pk=pk)
     members = group.members.all()
-    keys = group.digitalkey_set.all()
+    wrp_keys = (DigitalKeyWrapper(key) for key in group.digitalkey_set.all())
     return render(request, 'employee/group_detail.html', {
         'group': group,
         'members': members,
-        'keys': keys
+        'wrp_keys': wrp_keys
     })
 
 
