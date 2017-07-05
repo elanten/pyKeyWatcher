@@ -43,6 +43,9 @@ class DigitalKeyViewTest(TestCase):
         loc = create_location('TEST-LOC-1')
         sys = create_work_system('TEST-SYS-1')
         key = create_key('TEST-KEY-1')
+        key.pin_container = 'PIN-CON-123'
+        key.pin_admin = 'PIN-ADM-123'
+        key.pin_user = 'PIN-USR-123'
         key.location = loc
         key.work_systems.add(sys)
         key.save()
@@ -50,11 +53,16 @@ class DigitalKeyViewTest(TestCase):
         response = self.client.get(key_url)
         loc_url = reverse(URL_LOCATION_DETAIL, args=(loc.id,))
         sys_url = reverse(URL_SYSTEM_DETAIL, args=(sys.id,))
+
         self.assertContains(response, key.name)
         self.assertContains(response, loc.name)
         self.assertContains(response, loc_url)
         self.assertContains(response, sys.name)
         self.assertContains(response, sys_url)
+
+        self.assertNotContains(response, key.pin_container)
+        self.assertNotContains(response, key.pin_admin)
+        self.assertNotContains(response, key.pin_user)
 
 
 class DigitalKeyViewTestNoLogin(TestCase):
@@ -73,6 +81,46 @@ class DigitalKeyViewTestNoLogin(TestCase):
         key = create_key('Test key')
         response = self.client.get(reverse(URL_DIGITAL_KEY_DETAIL, args=(key.id,)))
         self.assertEquals(response.status_code, 302)
+
+
+class DigitalKeyViewTestStaff(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        User.objects.create_superuser(
+            username='su-tester',
+            password='su-pass',
+            email='email@test.io'
+        )
+
+    def setUp(self):
+        super().setUp()
+        self.client.login(username='su-tester', password='su-pass')
+
+    def test_detail_complex(self):
+        loc = create_location('TEST-LOC-1')
+        sys = create_work_system('TEST-SYS-1')
+        key = create_key('TEST-KEY-1')
+        key.pin_container = 'PIN-CON-123'
+        key.pin_admin = 'PIN-ADM-123'
+        key.pin_user = 'PIN-USR-123'
+        key.location = loc
+        key.work_systems.add(sys)
+        key.save()
+        key_url = reverse(URL_DIGITAL_KEY_DETAIL, args=(key.id,))
+        response = self.client.get(key_url)
+        loc_url = reverse(URL_LOCATION_DETAIL, args=(loc.id,))
+        sys_url = reverse(URL_SYSTEM_DETAIL, args=(sys.id,))
+
+        self.assertContains(response, key.name)
+        self.assertContains(response, loc.name)
+        self.assertContains(response, loc_url)
+        self.assertContains(response, sys.name)
+        self.assertContains(response, sys_url)
+
+        self.assertContains(response, key.pin_container)
+        self.assertContains(response, key.pin_admin)
+        self.assertContains(response, key.pin_user)
 
 
 class KeyLocationViewTest(TestCase):

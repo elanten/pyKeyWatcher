@@ -107,5 +107,17 @@
                 </div>
             </div>
         </div>
+        {% if user.is_staff %}
+            <div class="col-md-6">
+                <div class="panel panel-info">
+                    <div class="panel-heading">Служебная информация:</div>
+                    <div class="panel-body">
+                        <p><strong>Pin container:</strong> {{ view.key.pin_container }}</p>
+                        <p><strong>Pin admin:</strong> {{ view.key.pin_admin }}</p>
+                        <p><strong>Pin user:</strong> {{ view.key.pin_user }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}

@@ -1,3 +1,5 @@
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render
 
@@ -22,12 +24,13 @@ FILLS = {
 }
 
 
-def get_expire_fill(key):
+def _get_expire_fill(key):
     wrap = DigitalKeyWrapper(key)
     style = wrap.get_label_class()
     return FILLS[style]
 
 
+@staff_member_required()
 def export_key_xlsx(request):
     wb = Workbook()
 
@@ -47,7 +50,7 @@ def export_key_xlsx(request):
         _nam = _to_string(key.name)
         _beg = key.date_begin
         _exp = Cell(ws, value=key.date_expire)
-        _exp.fill = get_expire_fill(key)
+        _exp.fill = _get_expire_fill(key)
         _cer = _to_string(key.cert_holder)
         _rec = _to_string(key.key_receiver)
         _emp = _to_string(key.employee_group)
