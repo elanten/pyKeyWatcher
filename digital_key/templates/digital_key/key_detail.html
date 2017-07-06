@@ -13,7 +13,8 @@
                     <div class="row">
                         <div class="col-md-5">
                             <p><strong>Наименование:</strong> {{ view.key.name }}</p>
-                            <p><strong>Номер:</strong> {{ view.key.serial }}</p>
+                            <p><strong>Номер ключа:</strong> {{ view.key.serial }}</p>
+                            <p><strong>Номер сертификата:</strong> {{ view.key.cert_num }}</p>
                             <p><strong>Тип носителя:</strong> {{ view.key.type }}</p>
                             <p><strong>Сертификат:</strong>
                                 {% if view.key.cert_holder %}
@@ -30,7 +31,13 @@
                             {% endif %}
                         </div>
                         <div class="col-md-7">
-                            <p><strong>Назначение:</strong> {{ view.key.assignment }}</p>
+                            <p><strong>Назначение:</strong>
+                                {% if view.key.assignment %}
+                                    <a href="{% url 'digital_key:asgn_detail' view.key.assignment_id %}">{{ view.key.assignment }}</a>
+                                {% else %}
+                                    Не назначен
+                                {% endif %}
+                            </p>
                             <p><strong>Описание:</strong></p>
                             <pre>{{ view.key.description }}</pre>
                         </div>

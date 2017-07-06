@@ -3,7 +3,7 @@ from django.test import TestCase
 # Create your tests here.
 from django.urls import reverse
 
-from digital_key.tests.utils import create_key, create_location, create_work_system
+from digital_key.tests.utils import create_key, create_location, create_work_system, create_assignment
 
 URL_DIGITAL_KEY_ALL = 'digital_key:all'
 URL_DIGITAL_KEY_DETAIL = 'digital_key:show_by_id'
@@ -11,6 +11,8 @@ URL_LOCATION_ALL = 'digital_key:loc_all'
 URL_LOCATION_DETAIL = 'digital_key:loc_detail'
 URL_SYSTEM_ALL = 'digital_key:sys_all'
 URL_SYSTEM_DETAIL = 'digital_key:sys_detail'
+URL_ASSIGN_ALL = 'digital_key:asgn_all'
+URL_ASSIGN_DETAIL = 'digital_key:asgn_detail'
 
 
 class DigitalKeyViewTest(TestCase):
@@ -167,3 +169,21 @@ class WorkSystemsTest(TestCase):
         sys = create_work_system('TEST-SYS-1')
         response = self.client.get(reverse(URL_SYSTEM_DETAIL, args=(sys.id,)))
         self.assertContains(response, sys.name)
+
+
+class AssignmentsViewTest(TestCase):
+    def test_all_empty(self):
+        response = self.client.get(reverse(URL_ASSIGN_ALL))
+        self.assertEquals(response.status_code, 200)
+
+    def test_all(self):
+        assign1 = create_assignment('TEST-ASSING-1')
+        assign2 = create_assignment('TEST-ASSING-2')
+        response = self.client.get(reverse(URL_ASSIGN_ALL))
+        self.assertContains(response, assign1.name)
+        self.assertContains(response, assign2.name)
+
+    def test_detail(self):
+        assign = create_assignment('TEST-ASSING')
+        response = self.client.get(reverse(URL_ASSIGN_DETAIL, args=(assign.id,)))
+        self.assertContains(response, assign.name)

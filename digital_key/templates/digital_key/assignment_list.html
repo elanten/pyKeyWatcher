@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div id="toolbar">
+        <div class="form-inline" role="form">
+            {#            <a href="{% url 'digital_key:add' %}" class="btn btn-default">#}
+            {#                <span class="glyphicon glyphicon-plus"></span>#}
+            {#            </a>#}
+        </div>
+    </div>
+    <table data-toggle="table"
+           data-height="700"
+           data-toolbar="#toolbar"
+           data-search="true">
+        <thead>
+        <tr style="display: none">
+            <th data-sortable="true">Название</th>
+            <th data-sortable="true">Ключей</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for asgn in assignments %}
+            <tr style="display: none">
+                <td><a href="{% url 'digital_key:asgn_detail' asgn.id %}">{{ asgn.name }}</a></td>
+                <td>{{ asgn.digitalkey_set.count }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

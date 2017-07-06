@@ -19,7 +19,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-3">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     Контактные данные:
@@ -31,27 +31,38 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">Группы:</div>
+                <div class="panel-body">
+                    <ul>
+                        {% for group in groups %}
+                            <li><a href="{% url 'employee:group_detail' group.id %}">{{ group }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
         <div class="col-md-6">
             <div class="panel panel-default">
-                <div class="panel-heading">Ключи:</div>
+                <div class="panel-heading">Сертификаты:</div>
                 <div class="panel-body">
-                    {% for view in linked_keys %}
-                        <p>
-                            <a href="{% url 'digital_key:show_by_id' view.key.id %}">{{ view.key }}</a>
-                            {% if view.key.date_expire %}
-                                <span class="label label-{{ view.get_label_class }}">{{ view.key.date_expire|date:'d.m.y' }}</span>
-                            {% endif %}
-                            {% if view.in_cert %}
-                                <span class="label label-warning">Сертификат</span>
-                            {% endif %}
-                            {% if view.in_hold %}
-                                <span class="label label-primary">Получатель</span>
-                            {% endif %}
-                            {% if view.in_group %}
-                                <span class="label label-success">В группе держателей</span>
-                            {% endif %}
-                        </p>
-                    {% endfor %}
+                    <ol>
+{#                        {% for view in wrp_cert_keys %}#}
+{#                            <li>#}
+{#                                <a href="{% url 'digital_key:show_by_id' view.key.id %}">{{ view.key }}</a>#}
+{#                                <span class="label label-{{ view.get_label_class }}">{{ view.key.date_expire|date:'d.m.y' }}</span>#}
+{#                                {% if view.key.location %}#}
+{#                                    <span class="label label-default">{{ view.key.location }}</span>#}
+{#                                {% endif %}#}
+{#                                {% if view.key.copy_of %}#}
+{#                                    <a class="label label-info" href="{% url 'digital_key:show_by_id' view.key.copy_of_id %}">#}
+{#                                        копия</a>#}
+{#                                {% endif %}#}
+{#                            </li>#}
+{#                        {% endfor %}#}
+                        {% include 'digital_key/frag/key_views_list.html' %}
+                    </ol>
                 </div>
             </div>
         </div>

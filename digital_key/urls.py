@@ -15,4 +15,7 @@ urlpatterns = [
 
     url(r'^system/all$', views.system_list, name='sys_all' ),
     url(r'^system/detail/(?P<pk>\d+)$', views.system_detail, name='sys_detail'),
+
+    url(r'^assignment/all$', views.assignment_list, name='asgn_all'),
+    url(r'^assignment/detail/(?P<pk>\d+)$', views.assignment_detail, name='asgn_detail'),
 ]

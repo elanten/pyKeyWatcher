@@ -55,17 +55,19 @@ class EmployeeListView(generic.ListView):
 
 
 # def show_all(request):
-#     return render(request, 'employee/list.html', {
+#     return render(request, 'employee/key_list.html', {
 #         'employees': Employee.objects.all()
 #     })
 
 
 def show_by_id(request, cid: int):
     employee = get_object_or_404(Employee, pk=cid)
+    cert_keys = DigitalKey.objects.filter(cert_holder=employee).order_by('date_expire')
     wrapped_list = KeyListWrapper(employee)
     return render(request, 'employee/detail.html', {
         'employee': employee,
-        'linked_keys': wrapped_list
+        'groups': employee.employeegroup_set.all(),
+        'key_views': (DigitalKeyWrapper(key) for key in cert_keys)
     })
 
 
@@ -163,6 +165,7 @@ class EmployeeGroupsList(generic.ListView):
     template_name = 'employee/group_list.html'
     context_object_name = 'groups'
     allow_empty = True
+
 
 def group_all(request):
     groups = EmployeeGroup.objects.all()

@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.template.context import RequestContext
 from django.views.generic import ListView
 
+from digital_key.models import KeyAssignment
 from .forms import DigitalKeyForm
 from .models import DigitalKey, KeyLocation, WorkSystem
 from .support import DigitalKeyWrapper
@@ -20,13 +21,14 @@ def _to_string(obj, default=''):
 def show_all(request):
     keys = DigitalKey.objects.all()
     key_views = list(DigitalKeyWrapper(key) for key in keys)
-    return render(request, 'digital_key/list.html', {
+    return render(request, 'digital_key/key_list.html', {
         'key_views': key_views
     })
 
+
 # class KeyAllView(ListView):
 #     model = DigitalKey
-#     template_name = 'digital_key/list.html'
+#     template_name = 'digital_key/key_list.html'
 
 
 
@@ -34,7 +36,7 @@ def show_all(request):
 @login_required()
 def show_by_id(request, key_id):
     digital_key = get_object_or_404(DigitalKey, pk=key_id)
-    return render(request, 'digital_key/detail.html', {
+    return render(request, 'digital_key/key_detail.html', {
         'view': DigitalKeyWrapper(digital_key)
     })
 
@@ -128,5 +130,21 @@ def system_detail(request, pk):
     key_views = [DigitalKeyWrapper(key) for key in system.digitalkey_set.all()]
     return render(request, 'digital_key/system_detail.html', {
         'system': system,
+        'key_views': key_views
+    })
+
+
+def assignment_list(request):
+    assignments = KeyAssignment.objects.all()
+    return render(request, 'digital_key/assignment_list.html', {
+        'assignments': assignments
+    })
+
+
+def assignment_detail(request, pk):
+    assignment = get_object_or_404(KeyAssignment, pk=pk)
+    key_views = [DigitalKeyWrapper(key) for key in assignment.digitalkey_set.all()]
+    return render(request, 'digital_key/assignment_detail.html', {
+        'assignment': assignment,
         'key_views': key_views
     })

@@ -19,16 +19,6 @@ class KeyType(models.Model):
         return self.name
 
 
-class KeyAssignment(models.Model):
-    name = models.CharField(max_length=200)
-    name_full = models.CharField(max_length=255, blank=True, default='')
-
-    description = models.TextField(blank=True)
-
-    def __str__(self):
-        return self.name
-
-
 class KeyLocation(models.Model):
     name = models.CharField(max_length=255)
     name_full = models.CharField(max_length=255, blank=True, default='')
@@ -50,12 +40,26 @@ class WorkSystem(models.Model):
         return self.name
 
 
+class KeyAssignment(models.Model):
+    name = models.CharField(max_length=200)
+    name_full = models.CharField(max_length=255, blank=True, default='')
+
+    description = models.TextField(blank=True)
+
+    work_systems = models.ManyToManyField(WorkSystem, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
 class DigitalKey(models.Model):
     name = models.CharField(max_length=255)
     name_full = models.CharField(max_length=255, blank=True, default='')
 
     serial = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True, default='')
+
+    cert_num = models.CharField(max_length=255, blank=True, default='')
 
     pin_user = models.CharField(max_length=255, blank=True, default='')
     pin_admin = models.CharField(max_length=255, blank=True, default='')

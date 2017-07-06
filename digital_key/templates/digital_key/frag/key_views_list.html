@@ -1,0 +1,14 @@
+{% for view in key_views %}
+    <li>
+        <a href="{% url 'digital_key:show_by_id' view.key.id %}">{{ view.key }}</a>
+        <span class="label label-{{ view.get_label_class }}">{{ view.key.date_expire|date:'d.m.y' }}</span>
+        {% if view.key.location %}
+            <a  class="label label-default" href="{% url 'digital_key:loc_detail' view.key.location_id %}">
+                {{ view.key.location }}</a>
+        {% endif %}
+        {% if view.key.copy_of %}
+            <a class="label label-info" href="{% url 'digital_key:show_by_id' view.key.copy_of_id %}">
+                копия</a>
+        {% endif %}
+    </li>
+{% endfor %}
