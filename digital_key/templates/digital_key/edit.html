@@ -8,17 +8,31 @@
                 <input type="hidden" name="keyId" value="2">
                 <div class="panel panel-warning">
                     <div class="panel-heading">
-                        Инормация по ключу:
-                        {% if digitalkey_form.get_id %}
+                        Основная информация:
+                        {% comment %}{% if digitalkey_form.get_id %}
                             <a id="btn-remove" href="{% url 'digital_key:remove_by_id' digitalkey_form.get_id %}">
                                 <span class="glyphicon glyphicon-trash pull-right"></span>
                             </a>
-                        {% endif %}
+                        {% endif %}{% endcomment %}
                     </div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-5">
-                                <div class="form-group">
+
+                                <div class="form-horizontal">
+                                    <div class="form-group">
+                                        {{ digitalkey_form.name|label_with_classes:'control-label' }}
+                                        {{ digitalkey_form.name|field_with_classes:'form-control' }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ digitalkey_form.type|label_with_classes:'control-label' }}
+                                        {{ digitalkey_form.type|field_with_classes:'form-control' }}
+                                    </div>
+                                </div>
+
+
+                                {#                                {{ digitalkey_form.type }}#}
+                                {% comment %}<div class="form-group">
                                     {{ digitalkey_form.name|label_with_classes:'control-label' }}
                                     {{ digitalkey_form.name|field_with_classes:'form-control' }}
                                 </div>
@@ -33,17 +47,17 @@
                                 <div class="form-group">
                                     {{ digitalkey_form.key_allocation|label_with_classes:'control-label' }}
                                     {{ digitalkey_form.key_allocation|field_with_classes:'form-control' }}
-                                </div>
+                                </div>{% endcomment %}
                             </div>
                             <div class="col-md-7">
-                                <div class="form-group">
+                                {% comment %}<div class="form-group">
                                     {{ digitalkey_form.key_type|label_with_classes:'control-label' }}
                                     {{ digitalkey_form.key_type|field_with_classes:'form-control' }}
                                 </div>
                                 <div class="form-group">
                                     {{ digitalkey_form.description|label_with_classes:'control-label' }}
                                     {{ digitalkey_form.description|field_with_classes:'form-control' }}
-                                </div>
+                                </div>{% endcomment %}
                             </div>
                         </div>
                     </div>
@@ -53,25 +67,25 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Держатели ключа</div>
+                    <div class="panel-heading">Дополнительная информация:</div>
                     <div class="panel-body">
-                        <select name="holders" id="holders" multiple="multiple" style="display: none">
+                        {% comment %}<select name="holders" id="holders" multiple="multiple" style="display: none">
                             {% for contact in holders %}
                                 <option value="{{ contact.id }}" selected="selected">{{ contact.name }}</option>
                             {% endfor %}
-                        </select>
+                        </select>{% endcomment %}
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Контакты</div>
+                    <div class="panel-heading">Сроки действия:</div>
                     <div class="panel-body">
-                        <select name="contacts" id="contacts" multiple="multiple" style="display: none">
+                        {% comment %}<select name="contacts" id="contacts" multiple="multiple" style="display: none">
                             {% for contact in contacts %}
                                 <option value="{{ contact.id }}" selected="selected">{{ contact.name }}</option>
                             {% endfor %}
-                        </select>
+                        </select>{% endcomment %}
                     </div>
                 </div>
             </div>

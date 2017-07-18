@@ -67,6 +67,9 @@ class DigitalKey(models.Model):
 
     date_begin = models.DateField(blank=True, null=True)
     date_expire = models.DateField(blank=True, null=True)
+
+    date_checked = models.DateField(blank=True, null=True)
+
     renewal_time = models.PositiveIntegerField(blank=True, default=0)
 
     type = models.ForeignKey(KeyType, blank=True, null=True)

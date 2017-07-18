@@ -27,7 +27,9 @@ class Manual(models.Model):
     content = models.TextField(blank=True, default='')
 
     link = models.URLField(blank=True, default='')
-    path = models.FilePathField(path='c:/temp', recursive=True, blank=True, null=True)
+    path = models.FilePathField(
+        path='/path_to_manuals/', match='\.(?:pdf|doc|docx|xls|xlsx)$',
+        recursive=True, blank=True, null=True)
 
     type = models.ForeignKey(ManualType, blank=True, null=True)
     tags = models.ManyToManyField(ManualTag, blank=True)

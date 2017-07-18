@@ -17,11 +17,11 @@
         <tr style="display: none">
             <th data-sortable="true" data-valign="middle">Название</th>
             <th data-sortable="true" data-valign="middle">Номер</th>
+            <th data-sortable="true">Сертификат</th>
             <th data-field="expire" data-valign="middle" data-sortable="true">Истекает</th>
-            <th data-sortable="true" data-valign="middle">Тип</th>
+            <th data-sortable="true">Проверен</th>
+            {#            <th data-sortable="true" data-valign="middle">Тип</th>#}
             <th data-sortable="true" data-valign="middle">Назначение</th>
-            <th data-sortable="true" data-valign="middle">Хранение</th>
-            <th data-sortable="true">Системы</th>
             <th data-sortable="true">УЦ</th>
         </tr>
         </thead>
@@ -30,10 +30,13 @@
             <tr class="{{ view.get_label_class }}" style="display: none">
                 <td><a href="{% url 'digital_key:show_by_id' view.key.id %}">{{ view.key.name }}</a></td>
                 <td>{{ view.key.serial|default:'' }}</td>
+                <td>{{ view.key.cert_holder|default:'' }}</td>
                 <td>{{ view.key.date_expire|date:'Y-m-d'|default:'нет срока' }}</td>
-                <td>{{ view.key.type|default:'' }}</td>
+                {#<td>{{ view.key.type|default:'' }}</td>#}
+                <td>{{ view.key.date_checked|date:'Y-m-d'|default:'' }}</td>
                 <td>{{ view.key.assignment|default:'' }}</td>
-                <td>{{ view.key.location|default:'' }}</td>
+                {#<td>{{ view.key.location|default:'' }}</td>#}
+                {% comment %}
                 <td>
                     {% if view.key.work_systems.count %}
                         {% for sys in view.key.work_systems.all %}
@@ -41,6 +44,7 @@
                         {% endfor %}
                     {% endif %}
                 </td>
+                {% endcomment %}
                 <td>{% if view.key.cert_center_id %}
                     <a href="{% url 'cert_center:show_by_id' view.key.cert_center_id %}">{{ view.key.cert_center }}</a>
                 {% endif %}</td>
