@@ -5,9 +5,11 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     Основная информация:
-                    <a href="{% url 'digital_key:edit_by_id' view.key.id %}">
-                        <span class="glyphicon glyphicon-pencil pull-right"></span>
-                    </a>
+                    {% if user.is_staff %}
+                        <a href="{% url 'digital_key:edit_by_id' view.key.id %}">
+                            <span class="glyphicon glyphicon-pencil pull-right"></span>
+                        </a>
+                    {% endif %}
                 </div>
                 <div class="panel-body">
                     <div class="row">
@@ -29,11 +31,49 @@
                                     </a>
                                 </p>
                             {% endif %}
-                            {% if view.key.date_checked %}
-                                <p><strong>Проверен:</strong>
-                                    {{ view.key.date_checked|date:'Y-m-d' }}
+
+                            <p><strong>Выдан:</strong>
+                                {% if view.key.key_receiver %}
+                                    <a href="{% url 'employee:show_by_id' view.key.key_receiver_id %}">{{ view.key.key_receiver }}</a>
+                                {% endif %}
+                            </p>
+                            <p><strong>Группа держателей:</strong>
+                                {% if view.key.employee_group %}
+                                    <a href="{% url 'employee:group_detail' view.key.employee_group_id %}">
+                                        {{ view.key.employee_group }}</a>
+                                {% endif %}
+                            </p>
+                            <p><strong>Место хранения:</strong>
+                                {% if view.key.location %}
+                                    <a href="{% url 'digital_key:loc_detail' view.key.location_id %}">{{ view.key.location }}</a>
+                                {% endif %}
+                            </p>
+                            {% if view.key.work_systems.count %}
+                                <p><strong>Используется в системах:</strong></p>
+                                <ul>
+                                    {% for system in view.key.work_systems.all %}
+                                        <li><a href="{% url 'digital_key:sys_detail' system.id %}">{{ system.name }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                            {% if view.key.copy_of %}
+                                <p><strong>Оригинал ключа:</strong>
+                                    <a href="{% url 'digital_key:show_by_id' view.key.copy_of_id %}">{{ view.key.copy_of }}</a>
+                                    <span class="label label-default">{{ view.key.copy_of.location }}</span>
                                 </p>
                             {% endif %}
+                            {% if view.copies_count %}
+                                <p><strong>Копии ключа:</strong></p>
+                                <ul>
+                                    {% for copy in view.key.get_copies %}
+                                        <li><a href="{% url 'digital_key:show_by_id' copy.id %}">{{ copy }}</a>
+                                            <span class="label label-default">{{ copy.location }}</span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+
                         </div>
                         <div class="col-md-7">
                             <p><strong>Назначение:</strong>
@@ -52,70 +92,29 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6">
+        {% comment %}<div class="col-md-6">
             <div class="panel panel-default">
                 <div class="panel-heading">Дополнительная информация</div>
                 <div class="panel-body">
-                    {% if view.key.key_receiver %}
-                        <p><strong>Выдан:</strong>
-                            <a href="{% url 'employee:show_by_id' view.key.key_receiver_id %}">{{ view.key.key_receiver }}</a>
-                        </p>
-                    {% endif %}
-                    {% if view.key.employee_group %}
-                        <p><strong>Группа держателей:</strong>
-                            <a href="{% url 'employee:group_detail' view.key.employee_group_id %}">
-                                {{ view.key.employee_group }}</a>
-                        </p>
-                    {% endif %}
-                    {% if view.key.location %}
-                        <p><strong>Место хранения:</strong>
-                            <a href="{% url 'digital_key:loc_detail' view.key.location_id %}">{{ view.key.location }}</a>
-                        </p>
-                    {% endif %}
-                    {% if view.key.work_systems.count %}
-                        <p><strong>Используется в системах:</strong></p>
-                        <ul>
-                            {% for system in view.key.work_systems.all %}
-                                <li><a href="{% url 'digital_key:sys_detail' system.id %}">{{ system.name }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
-                    {% if view.key.copy_of %}
-                        <p><strong>Оригинал ключа:</strong>
-                            <a href="{% url 'digital_key:show_by_id' view.key.copy_of_id %}">{{ view.key.copy_of }}</a>
-                            <span class="label label-default">{{ view.key.copy_of.location }}</span>
-                        </p>
-                    {% endif %}
-                    {% if view.copies_count %}
-                        <p><strong>Копии ключа:</strong></p>
-                        <ul>
-                            {% for copy in view.key.get_copies %}
-                                <li><a href="{% url 'digital_key:show_by_id' copy.id %}">{{ copy }}</a>
-                                    <span class="label label-default">{{ copy.location }}</span>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
+
                 </div>
             </div>
-        </div>
+        </div>{% endcomment %}
         <div class="col-md-6">
             <div class="panel panel-{{ view.get_label_class }}">
                 <div class="panel-heading">Сроки действия:</div>
                 <div class="panel-body">
-                    {% if view.key.date_begin %}
-                        <p><strong>Начало:</strong> {{ view.key.date_begin|date:'Y-m-d' }}</p>
-                    {% endif %}
-                    {% if view.key.date_expire %}
-                        <p class="text-{{ view.get_label_class }}">
-                            <strong>Окончание:</strong> {{ view.key.date_expire|date:'Y-m-d' }}
-                        </p>
-                        <p class="text-{{ view.get_label_class }}"><strong>Истекает через:</strong> {{ view.days_left }}
-                            дней</p>
-                    {% endif %}
-                    {% if view.key.renewal_time %}
-                        <p><strong>Сроки перевыпуска:</strong> {{ view.key.renewal_time }} дней</p>
-                    {% endif %}
+                    <p><strong>Начало:</strong> {{ view.key.date_begin|date:'Y-m-d' }}</p>
+                    <p class="text-{{ view.get_label_class }}">
+                        <strong>Окончание:</strong> {{ view.key.date_expire|date:'Y-m-d' }}
+                    </p>
+                    <p class="text-{{ view.get_label_class }}"><strong>Истекает через:</strong> {{ view.days_left }}
+                        дней</p>
+                    <p><strong>Сроки перевыпуска:</strong> {{ view.key.renewal_time }} дней</p>
+                    <hr>
+                    <p><strong>Проверен:</strong>
+                        {{ view.key.date_checked|date:'Y-m-d' }}
+                    </p>
                 </div>
             </div>
         </div>

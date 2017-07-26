@@ -1,12 +1,20 @@
 {% extends 'base.html' %}
-{% load extras %}
+{% load extras static %}
+{% block link %}
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet"
+          href="{% static 'styles/lib/bootstrap-select.min.css' %}">
+{% endblock %}
 {% block content %}
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="{% static 'scripts/lib/bootstrap-select.min.js' %}"></script>
+
     <form method="post">
         {% csrf_token %}
         <div class="row">
             <div class="col-md-12">
                 <input type="hidden" name="keyId" value="2">
-                <div class="panel panel-warning">
+                <div class="panel panel-default">
                     <div class="panel-heading">
                         Основная информация:
                         {% comment %}{% if digitalkey_form.get_id %}
@@ -17,47 +25,30 @@
                     </div>
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-md-5">
+                            <div class="col-md-6">
 
                                 <div class="form-horizontal">
-                                    <div class="form-group">
-                                        {{ digitalkey_form.name|label_with_classes:'control-label' }}
-                                        {{ digitalkey_form.name|field_with_classes:'form-control' }}
-                                    </div>
-                                    <div class="form-group">
-                                        {{ digitalkey_form.type|label_with_classes:'control-label' }}
-                                        {{ digitalkey_form.type|field_with_classes:'form-control' }}
-                                    </div>
+                                    {% include 'digital_key/frag/key_form_inline.html' with field=digitalkey_form.name %}
+                                    {% include 'digital_key/frag/key_form_inline.html' with field=digitalkey_form.serial %}
+                                    {% include 'digital_key/frag/key_form_inline.html' with field=digitalkey_form.cert_num %}
+                                    {% include 'digital_key/frag/key_form_select.html' with field=digitalkey_form.type %}
+                                    {% include 'digital_key/frag/key_form_select.html' with field=digitalkey_form.cert_holder %}
+                                    {% include 'digital_key/frag/key_form_select.html' with field=digitalkey_form.cert_center %}
+                                    {% include 'digital_key/frag/key_form_select.html' with field=digitalkey_form.key_receiver %}
+                                    {% include 'digital_key/frag/key_form_select.html' with field=digitalkey_form.employee_group %}
+                                    {% include 'digital_key/frag/key_form_select.html' with field=digitalkey_form.location %}
                                 </div>
 
-
-                                {#                                {{ digitalkey_form.type }}#}
-                                {% comment %}<div class="form-group">
-                                    {{ digitalkey_form.name|label_with_classes:'control-label' }}
-                                    {{ digitalkey_form.name|field_with_classes:'form-control' }}
-                                </div>
-                                <div class="form-group">
-                                    {{ digitalkey_form.serial|label_with_classes:'control-label' }}
-                                    {{ digitalkey_form.serial|field_with_classes:'form-control' }}
-                                </div>
-                                <div class="form-group">
-                                    {{ digitalkey_form.expire|label_with_classes:'control-label' }}
-                                    {{ digitalkey_form.expire|field_with_classes:'form-control' }}
-                                </div>
-                                <div class="form-group">
-                                    {{ digitalkey_form.key_allocation|label_with_classes:'control-label' }}
-                                    {{ digitalkey_form.key_allocation|field_with_classes:'form-control' }}
-                                </div>{% endcomment %}
                             </div>
-                            <div class="col-md-7">
-                                {% comment %}<div class="form-group">
-                                    {{ digitalkey_form.key_type|label_with_classes:'control-label' }}
-                                    {{ digitalkey_form.key_type|field_with_classes:'form-control' }}
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ digitalkey_form.assignment|label_with_classes:'control-label' }}
+                                    {{ digitalkey_form.assignment|field_with_classes:'form-control selectpicker1' }}
                                 </div>
                                 <div class="form-group">
                                     {{ digitalkey_form.description|label_with_classes:'control-label' }}
                                     {{ digitalkey_form.description|field_with_classes:'form-control' }}
-                                </div>{% endcomment %}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -65,27 +56,29 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6">
+            {% comment %}          <div class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">Дополнительная информация:</div>
                     <div class="panel-body">
-                        {% comment %}<select name="holders" id="holders" multiple="multiple" style="display: none">
-                            {% for contact in holders %}
-                                <option value="{{ contact.id }}" selected="selected">{{ contact.name }}</option>
-                            {% endfor %}
-                        </select>{% endcomment %}
+                        <div class="form-horizontal">
+                            {% include 'digital_key/frag/key_form_select.html' with field=digitalkey_form.key_receiver %}
+                            {% include 'digital_key/frag/key_form_select.html' with field=digitalkey_form.employee_group %}
+                            {% include 'digital_key/frag/key_form_select.html' with field=digitalkey_form.location %}
+                        </div>
                     </div>
                 </div>
-            </div>
+            </div>{% endcomment %}
             <div class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">Сроки действия:</div>
                     <div class="panel-body">
-                        {% comment %}<select name="contacts" id="contacts" multiple="multiple" style="display: none">
-                            {% for contact in contacts %}
-                                <option value="{{ contact.id }}" selected="selected">{{ contact.name }}</option>
-                            {% endfor %}
-                        </select>{% endcomment %}
+                        <div class="form-horizontal">
+                            {% include 'digital_key/frag/key_form_date.html' with field=digitalkey_form.date_begin %}
+                            {% include 'digital_key/frag/key_form_date.html' with field=digitalkey_form.date_expire %}
+                            {% include 'digital_key/frag/key_form_inline.html' with field=digitalkey_form.renewal_time %}
+                            <hr>
+                            {% include 'digital_key/frag/key_form_date.html' with field=digitalkey_form.date_checked %}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -100,6 +93,13 @@
     </form>
     <script>
         $(function () {
+
+            $('.selectpicker1').selectpicker({
+                style: 'btn-primary',
+                size: 5,
+                liveSearch: true
+            });
+
             $("#holders, #contacts")
                 .selectize({
                     valueField: 'id',
@@ -139,12 +139,13 @@
                     e.preventDefault();
                 }
             });
-            var $expire = $('#id_expire');
+            var date_fields = $('.datepicker');
 
-            $expire.attr('placeholder', moment().format('YYYY-MM-DD'));
-            $expire.datetimepicker({
+            {#            datefield.attr('placeholder', moment().format('YYYY-MM-DD'));#}
+            date_fields.datetimepicker({
                 locale: 'ru',
-                format: 'YYYY-MM-DD'
+                {#                format: 'YYYY-MM-DD'#}
+                format: 'DD.MM.YYYY'
             });
         });
 
