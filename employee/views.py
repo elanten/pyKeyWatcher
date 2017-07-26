@@ -49,7 +49,7 @@ class EmployeeKeyWrapper(DigitalKeyWrapper):
 
 class EmployeeListView(generic.ListView):
     model = Employee
-    template_name = 'employee/list.html'
+    template_name = 'employee/emp_list.html'
     context_object_name = 'employees'
     allow_empty = True
 
@@ -64,7 +64,7 @@ def show_by_id(request, cid: int):
     employee = get_object_or_404(Employee, pk=cid)
     cert_keys = DigitalKey.objects.filter(cert_holder=employee).order_by('date_expire')
     wrapped_list = KeyListWrapper(employee)
-    return render(request, 'employee/detail.html', {
+    return render(request, 'employee/emp_detail.html', {
         'employee': employee,
         'groups': employee.employeegroup_set.all(),
         'key_views': (DigitalKeyWrapper(key) for key in cert_keys)
@@ -86,7 +86,7 @@ def show_all_by_type(request, ctype):
     employees = Employee.objects.filter(digitalkeycontact__type=ctype[:1]).distinct()
     if not employees:
         raise Http404('Контакты')
-    return render(request, 'employee/list.html', {
+    return render(request, 'employee/emp_list.html', {
         'employees': employees
     })
 
@@ -114,7 +114,7 @@ def edit_by_id(request, cid: int):
         contragent_form = EmployeeForm(instance=employee)
         info_formset = ContactInfoFormSet(queryset=info_set)
 
-    return render(request, 'employee/edit.html', {
+    return render(request, 'employee/emp_edit.html', {
         'contragent_form': contragent_form,
         'info_formset': info_formset
     })
@@ -136,7 +136,7 @@ def create(request):
     else:
         contragent_form = EmployeeForm()
         info_formset = ContactInfoFormSet()
-    return render(request, 'employee/edit.html', {
+    return render(request, 'employee/emp_edit.html', {
         'contragent_form': contragent_form,
         'info_formset': info_formset
     })

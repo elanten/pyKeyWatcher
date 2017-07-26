@@ -1,5 +1,6 @@
 from imaplib import Response_code
 
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.core.handlers.wsgi import WSGIHandler
 from django.shortcuts import render, get_object_or_404, redirect
@@ -41,34 +42,19 @@ def show_by_id(request, key_id):
     })
 
 
+@staff_member_required()
 def edit_by_id(request: WSGIHandler, key_id):
     digital_key = get_object_or_404(DigitalKey, pk=key_id)
-    # holders = digital_key.contacts.filter(digitalkeycontact__type=DigitalKeyContact.HOLDER).values('id', 'name')
-    # contacts = digital_key.contacts.filter(digitalkeycontact__type=DigitalKeyContact.CONTACT).values('id', 'name')
-
     if request.method == 'POST':
         digital_key_form = DigitalKeyForm(request.POST, instance=digital_key)
-        if digital_key_form.is_valid():
-            if digital_key_form.has_changed():
-                digital_key = digital_key_form.save()
-            digital_key.contacts.clear()
-            holders_ids = request.POST.getlist('holders', [])
-            contacts_ids = request.POST.getlist('contacts', [])
-            # for _id in holders_ids:
-            #     DigitalKeyContact(digital_key=digital_key, contragent_id=_id,
-            #                       type=DigitalKeyContact.HOLDER).save()
-            #
-            # for _id in contacts_ids:
-            #     DigitalKeyContact(digital_key=digital_key, contragent_id=_id,
-            #                       type=DigitalKeyContact.CONTACT).save()
-            return redirect('digital_key:show_by_id', digital_key.id)
+        if digital_key_form.is_valid() and digital_key_form.has_changed():
+            digital_key = digital_key_form.save()
+        return redirect('digital_key:show_by_id', digital_key.id)
     else:
         digital_key_form = DigitalKeyForm(instance=digital_key)
 
-    return render(request, 'digital_key/edit.html', {
+    return render(request, 'digital_key/key_edit.html', {
         'digitalkey_form': digital_key_form,
-        # 'holders': holders,
-        # 'contacts': contacts
     })
 
 
@@ -89,7 +75,7 @@ def create(request):
             return redirect('digital_key:show_by_id', digital_key.id)
     else:
         digital_key_form = DigitalKeyForm(instance=digital_key)
-    return render(request, 'digital_key/edit.html', {
+    return render(request, 'digital_key/key_edit.html', {
         'digitalkey_form': digital_key_form,
         'holders': [],
         'contacts': []

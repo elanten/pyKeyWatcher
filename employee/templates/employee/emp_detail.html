@@ -31,6 +31,16 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">Сертификаты:</div>
+                <div class="panel-body">
+                    <ol>
+                        {% include 'digital_key/frag/key_views_list.html' %}
+                    </ol>
+                </div>
+            </div>
+        </div>
         <div class="col-md-3">
             <div class="panel panel-default">
                 <div class="panel-heading">Группы:</div>
@@ -43,28 +53,6 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">Сертификаты:</div>
-                <div class="panel-body">
-                    <ol>
-{#                        {% for view in wrp_cert_keys %}#}
-{#                            <li>#}
-{#                                <a href="{% url 'digital_key:show_by_id' view.key.id %}">{{ view.key }}</a>#}
-{#                                <span class="label label-{{ view.get_label_class }}">{{ view.key.date_expire|date:'d.m.y' }}</span>#}
-{#                                {% if view.key.location %}#}
-{#                                    <span class="label label-default">{{ view.key.location }}</span>#}
-{#                                {% endif %}#}
-{#                                {% if view.key.copy_of %}#}
-{#                                    <a class="label label-info" href="{% url 'digital_key:show_by_id' view.key.copy_of_id %}">#}
-{#                                        копия</a>#}
-{#                                {% endif %}#}
-{#                            </li>#}
-{#                        {% endfor %}#}
-                        {% include 'digital_key/frag/key_views_list.html' %}
-                    </ol>
-                </div>
-            </div>
-        </div>
+
     </div>
 {% endblock content %}
